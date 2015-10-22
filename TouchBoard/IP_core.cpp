@@ -4,16 +4,6 @@
 using namespace cv;
 using namespace std;
 
-Mat otsuSegment(Mat src)
-{
-	Mat output;
-	int threshold;
-	
-
-
-	return output;
-}
-
 array<int, 255> getHistogram(Mat src)
 {
 	array<int, 255> histogram;
@@ -31,29 +21,27 @@ array<int, 255> getHistogram(Mat src)
 	return histogram;
 }
 
-int getBestOtsuScore(array<int, 255> histogram)
+Mat rgb2gray(Mat src)
 {
-	int bestScore;
-	
-	//TODO: create the algorithm..
+	Mat output(src.size(), CV_8U, Scalar(0));
 
-	return bestScore;
-}
-
-Mat threshold(Mat src, int threshold)
-{
 	for (int y = 0; y < src.rows; ++y)
 	{
 		for (int x = 0; x < src.cols; ++x)
 		{
-			if (src.at<uchar>(y, x) >= threshold)
-			{
-				src.at<uchar>(y, x) = 255;
-			}
-			else
-			{
-				src.at<uchar>(y, x) = 0;
-			}
+			output.at<uchar>(y, x) = (src.at<Vec3b>(y, x)[0] + src.at<Vec3b>(y, x)[1] + src.at<Vec3b>(y, x)[2]) / 3;
 		}
 	}
+	
+	return output;
+}
+
+Mat meanFilter(Mat src, int radius)
+{
+	//stuff here
+}
+
+Mat medianFiler(Mat src, int radius)
+{
+	//dunno if we need one of these
 }
