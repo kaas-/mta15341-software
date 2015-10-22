@@ -4,9 +4,9 @@
 using namespace cv;
 using namespace std;
 
-array<int, 255> getHistogram(Mat src)
+array<int, 256> getHistogram(Mat src)
 {
-	array<int, 255> histogram;
+	array<int, 256> histogram;
 	histogram.fill(0);
 
 	for (int y = 0; y < src.rows; ++y)

@@ -14,7 +14,7 @@ Mat otsuSegment(Mat src)
 	return output;
 }
 
-int getBestOtsuScore(array<int, 255> histogram)
+int getBestOtsuScore(array<int, 256> histogram)
 {
 	int bestScore;
 	
