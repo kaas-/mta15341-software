@@ -64,74 +64,118 @@ void gaussianFilter(Mat src, Mat dst, Mat kernelXY)
 
 }
 
-void itsMorphinTime(Mat inputImage, int morph_size, MorphShapes morph_shape, MorphTypes morph_type)
+Mat itsMorphinTime(Mat inputImage, Mat outputImage, int morph_size, MorphShapes morph_shape, MorphTypes morph_type)
 {
+
 	morph_size = 1;
 
 	Mat element = getStructuringElement(morph_shape, Size(4 * morph_size + 1, 2 * morph_size + 1), Point(morph_size, morph_size));
 
-	morphologyEx(inputImage, inputImage, morph_type, element);
+	morphologyEx(inputImage, outputImage, morph_type, element);
+
+	return outputImage;
 }
 
-void thresholding(Mat image, int threshold_value)
+Mat thresholding(Mat input, Mat output, int threshold_value)
 {
-	for (int y = 0; y < image.rows; y++)
+	for (int y = 0; y < input.rows; y++)
 	{
-		for (int x = 0; x < image.cols; x++)
+		for (int x = 0; x < input.cols; x++)
 		{
-			if (threshold_value <= image.at<uchar>(y, x))
+			if (threshold_value <= input.at<uchar>(y, x))
 			{
-				image.at<uchar>(y, x) = 255;
+				output.at<uchar>(y, x) = 255;
 			}
 			else
-				image.at<uchar>(y, x) = 0;
+				output.at<uchar>(y, x) = 0;
 		}
 	}
+	return output;
 }
 
-void blobDetection(Mat image)
+void blobDetection(Mat input, Mat output)
 {
-	SimpleBlobDetector::Params params;
+
+	vector< vector <Point>> contours;
+	vector< vector <Point>> approxContours;
+
+	cv::SimpleBlobDetector::Params params;
 	params.minDistBetweenBlobs = 50.0f;
 	params.filterByInertia = false;
 	params.filterByConvexity = false;
 	params.filterByColor = false;
 	params.filterByCircularity = false;
 	params.filterByArea = true;
-	params.minArea = 20.0f;
+	params.minArea = 300.0f;
 	params.maxArea = 500.0f;
 
-	Ptr<SimpleBlobDetector> detector = SimpleBlobDetector::create(params);
+	cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(params);
 	
-	vector<KeyPoint> keypoints;
-	detector->detect(image, keypoints);
+	vector<cv::KeyPoint> keypoints;
+	detector->detect(input, keypoints);
 
-	Mat imageWithKey;
-	drawKeypoints(image, imageWithKey, Scalar(0, 0, 255));
+	for (int i = 0; i<keypoints.size(); i++){
+		float X = keypoints[i].pt.x;
+		float Y = keypoints[i].pt.y;
+		cout << "Biggest blob is at " << X << ", " << Y << "\n";
+	}
 
-	imshow("keypoints", imageWithKey);
+	drawKeypoints(input, keypoints, output, Scalar(0, 0, 255), DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+
+	imshow("WithKeys", output);
+
 }
 
-int main(int, char)
+void imageOutput(Mat image, String path)
+{
+	image = imread(path, 0);
+	Mat gaussian = image.clone(); 
+	Mat thresholdedImage = image.clone();
+	Mat morphedImage = image.clone();
+	Mat detectedBlobs = image.clone();
+	GaussianBlur(image, gaussian, Size(3, 3), 1.5, 1.5); //Apply gaussian filter with a 7x7 kernel and a sigma of 1.5
+	thresholding(gaussian, thresholdedImage, 135); //Threshold (binarise) the image
+	itsMorphinTime(thresholdedImage, morphedImage, 3, MORPH_ELLIPSE, MORPH_OPEN); //Do morphological operations on image, with 3x3 kernel, ellipse-shaped and opening
+	
+	imshow("Original", image);
+	imshow("Gaussian", gaussian);
+	imshow("Thresholded", thresholdedImage);
+	imshow("Morphed", morphedImage);
+
+	blobDetection(morphedImage, detectedBlobs);
+	//imshow("Blobs", detectedBlobs);
+}
+
+int webcamOutput()
 {
 	VideoCapture cap(0); // open the default camera
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
-	//Mat edges;
-	namedWindow("keypoints", 1);
-	for (;;)
+	while (true)
 	{
 		Mat frame;
 		cap >> frame; // get a new frame from camera
 
-		cvtColor(frame, frame, CV_BGR2GRAY);
-		GaussianBlur(frame, frame, Size(7, 7), 1.5, 1.5);
-		thresholding(frame, 135);
-		itsMorphinTime(frame, 3, MORPH_ELLIPSE, MORPH_OPEN);
-		imshow("Processed", frame);
+		cvtColor(frame, frame, CV_BGR2GRAY); //Convert to 8bit
+		Mat gaussian = image.clone();
+		Mat thresholdedImage = image.clone();
+		Mat morphedImage = image.clone();
+		Mat detectedBlobs = image.clone();
+		GaussianBlur(image, gaussian, Size(3, 3), 1.5, 1.5); //Apply gaussian filter with a 7x7 kernel and a sigma of 1.5
+		thresholding(gaussian, thresholdedImage, 135); //Threshold (binarise) the image
+		itsMorphinTime(thresholdedImage, morphedImage, 3, MORPH_ELLIPSE, MORPH_OPEN); //Do morphological operations on image, with 3x3 kernel, ellipse-shaped and opening
+
+		blobDetection(morphedImage, detectedBlobs);
 		if (waitKey(30) >= 0)
 			break;
 	}
+	return 0;
+}
+
+int main(int, char)
+{
+	Mat image;
+	imageOutput(image, "C:/Dropbox/lena.jpg");
 
 	/*VideoCapture cap(0);
 	if (!cap.isOpened()) // check if we succeeded
@@ -168,5 +212,6 @@ int main(int, char)
 	//blobDetection(image);*/
 
 	// the camera will be deinitialized automatically in VideoCapture destructor
+	waitKey(0);
 	return 0;
 }
