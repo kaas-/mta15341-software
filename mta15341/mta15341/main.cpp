@@ -93,7 +93,7 @@ Mat thresholding(Mat input, Mat output, int threshold_value)
 	return output;
 }
 
-void blobDetection(Mat input, Mat output)
+void blobDetection(Mat input, Mat output, float minArea, float maxArea)
 {
 
 	vector< vector <Point>> contours;
@@ -106,8 +106,8 @@ void blobDetection(Mat input, Mat output)
 	params.filterByColor = false;
 	params.filterByCircularity = false;
 	params.filterByArea = true;
-	params.minArea = 300.0f;
-	params.maxArea = 500.0f;
+	params.minArea = minArea;
+	params.maxArea = maxArea;
 
 	cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(params);
 	
@@ -142,7 +142,7 @@ void imageOutput(Mat image, String path)
 	imshow("Thresholded", thresholdedImage);
 	imshow("Morphed", morphedImage);
 
-	blobDetection(morphedImage, detectedBlobs);
+	blobDetection(morphedImage, detectedBlobs, 300.0f, 1500.0f);
 	//imshow("Blobs", detectedBlobs);
 }
 
@@ -157,15 +157,11 @@ int webcamOutput()
 		cap >> frame; // get a new frame from camera
 
 		cvtColor(frame, frame, CV_BGR2GRAY); //Convert to 8bit
-		Mat gaussian = image.clone();
-		Mat thresholdedImage = image.clone();
-		Mat morphedImage = image.clone();
-		Mat detectedBlobs = image.clone();
-		GaussianBlur(image, gaussian, Size(3, 3), 1.5, 1.5); //Apply gaussian filter with a 7x7 kernel and a sigma of 1.5
-		thresholding(gaussian, thresholdedImage, 135); //Threshold (binarise) the image
-		itsMorphinTime(thresholdedImage, morphedImage, 3, MORPH_ELLIPSE, MORPH_OPEN); //Do morphological operations on image, with 3x3 kernel, ellipse-shaped and opening
+		GaussianBlur(frame, frame, Size(3, 3), 1.5, 1.5); //Apply gaussian filter with a 7x7 kernel and a sigma of 1.5
+		thresholding(frame, frame, 135); //Threshold (binarise) the image
+		itsMorphinTime(frame, frame, 3, MORPH_ELLIPSE, MORPH_OPEN); //Do morphological operations on image, with 3x3 kernel, ellipse-shaped and opening
 
-		blobDetection(morphedImage, detectedBlobs);
+		blobDetection(frame, frame, 300.0f, 1500.0f);
 		if (waitKey(30) >= 0)
 			break;
 	}
@@ -175,8 +171,8 @@ int webcamOutput()
 int main(int, char)
 {
 	Mat image;
-	imageOutput(image, "C:/Dropbox/lena.jpg");
-
+	//imageOutput(image, "C:/Dropbox/lena.jpg");
+	webcamOutput();
 	/*VideoCapture cap(0);
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
