@@ -28,4 +28,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BLOB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
