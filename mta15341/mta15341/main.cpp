@@ -114,7 +114,7 @@ void blobDetection(Mat image)
 
 int main(int, char)
 {
-	/*VideoCapture cap(0); // open the default camera
+	VideoCapture cap(0); // open the default camera
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
 	//Mat edges;
@@ -123,18 +123,17 @@ int main(int, char)
 	{
 		Mat frame;
 		cap >> frame; // get a new frame from camera
-		blobDetection(frame);
 
-
-		/*cvtColor(frame, edges, CV_BGR2GRAY);
-		GaussianBlur(edges, edges, Size(7, 7), 1.5, 1.5);
-		Canny(edges, edges, 0, 30, 3);
-		imshow("edges", edges);
+		cvtColor(frame, frame, CV_BGR2GRAY);
+		GaussianBlur(frame, frame, Size(7, 7), 1.5, 1.5);
+		thresholding(frame, 135);
+		itsMorphinTime(frame, 3, MORPH_ELLIPSE, MORPH_OPEN);
+		imshow("Processed", frame);
 		if (waitKey(30) >= 0)
 			break;
-	}*/
+	}
 
-	VideoCapture cap(0);
+	/*VideoCapture cap(0);
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
 
@@ -166,7 +165,7 @@ int main(int, char)
 		if (waitKey(30) >= 0)
 			break;
 	}
-	//blobDetection(image);
+	//blobDetection(image);*/
 
 	// the camera will be deinitialized automatically in VideoCapture destructor
 	return 0;
