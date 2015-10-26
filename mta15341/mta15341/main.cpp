@@ -6,64 +6,6 @@
 using namespace cv;
 using namespace std;
 
-void gaussianFilter(Mat src, Mat dst, Mat kernelXY)
-{
-	/*
-	double radius = ceil(r*2.57);
-	for (int i = 0; i < src.rows; i++)
-	{
-		for (int j = 0; j < src.cols; j++)
-		{
-			int val = 0, widthSum = 0;
-			for (int iy = i - radius; iy < i + radius + 1; iy++)
-			{
-				for (int ix = j - radius; iy < j + radius + 1; iy++)
-				{
-					int x = min(src.cols, max(0, ix));
-					int y = min(src.rows, max(0, iy));
-					int dsq = (ix - j)*(ix - j) + (iy - i)*(iy - 1);
-					int weight = exp(-dsq / (2 * r*r)) / (M_PI * 2 * r*r);
-					val += src[y*src.cols + x] * weight;
-					widthSum += weight;
-				}
-				dst[i*src.cols + j] = round(val / widthSum);
-			}
-		}
-	}
-	*/
-
-	
-
-	for (int i = 0; i < src.rows; i++)
-	{
-		for (int j = 0; j < src.cols; j++)
-		{
-			double p = 0;
-			for (int k = 0; k < kernelXY.rows; k++)
-			{
-				for (int l = 0; l < kernelXY.cols; l++)
-				{
-					if (i + k < src.rows && j + l < src.cols)
-					{
-						p += (src.at<double>(i + k, j + l)*kernelXY.at<double>(k, l));
-					}
-				}
-			}
-			if (i + kernelXY.rows / 2 < src.rows && j + kernelXY.cols / 2 < src.cols)
-			{
-				dst.at<double>(i + kernelXY.rows / 2, j + kernelXY.cols / 2) = p / sum(kernelXY)[0];
-			}
-		}
-	}
-
-
-
-	
-
-
-
-}
-
 Mat itsMorphinTime(Mat inputImage, Mat outputImage, int morph_size, MorphShapes morph_shape, MorphTypes morph_type)
 {
 
@@ -172,7 +114,7 @@ int main(int, char)
 {
 	Mat image;
 	//imageOutput(image, "C:/Dropbox/lena.jpg");
-	webcamOutput();
+	//webcamOutput();
 	/*VideoCapture cap(0);
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
