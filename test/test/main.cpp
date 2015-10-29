@@ -14,8 +14,8 @@ Mat result;
 char* image_window = "Source Image";
 char* result_window = "Result Window";
 
-int match_method;
-int max_Trackbar = 5;
+//int match_method;
+//int max_Trackbar = 5;
 
 
 void MatchingMethod(int, void*);
