@@ -12,10 +12,13 @@ private:
 	Gesture terraform;
 
 public:
-	Board(Hex* hex, Gesture terraform);
+	Board(Gesture terraform);
 	~Board();
 
-	void buildBoard(Hex* hex, Gesture gesture);
+	void buildBoard(Gesture);
+	Hex getHex(int);
+	void setHex(Hex, int);
+
 };
 
 #endif

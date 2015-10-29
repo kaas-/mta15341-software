@@ -5,10 +5,11 @@
 using namespace cv;
 using namespace std;
 
-Board board;
-Player currentPlayer;
-Hex currentHex;
 Mat image;
+Gesture gesture(image, image);
+Player currentPlayer(Tile::Type::BADLANDS,"GIANTS",gesture);
+//Hex currentHex;
+Board board(gesture);
 
 Hex findCurrentHex(Board currentBoard);
 
@@ -18,7 +19,17 @@ int runWebcam();
 
 int main(int, char)
 {
+	board.buildBoard(gesture);
 
+	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour() << "\n";
+	Hex newHex;
+	newHex.setTileType(Tile::Type::LAKES);
+	board.setHex(newHex, 100);
+	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour();
+
+	cin.get();
+	cin.get();
+	return 0;
 }
 
 int runWebcam()
@@ -43,10 +54,10 @@ int runWebcam()
 	return 0;
 }
 
-Hex findCurrentHex(Board currentBoard)
+/*Hex findCurrentHex(Board currentBoard)
 { 
 
-}
+}*/
 
 void changeCurrentColour(Hex hex, Player player)
 {

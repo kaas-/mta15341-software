@@ -21,6 +21,7 @@ void Gesture::setInputBlob(cv::Mat i)
 
 bool Gesture::compareBlob(cv::Mat inputBlob, cv::Mat knownBlob)
 {
+	return true;
 	/*
 	this is a method, which should compare the input blob from the camera with a known blob, in order to identify gestures.
 	this can be done, by comparing the histograms

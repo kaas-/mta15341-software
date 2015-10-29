@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Colours.h" />
     <ClInclude Include="Gesture.h" />
     <ClInclude Include="Hex.h" />
     <ClInclude Include="Player.h" />

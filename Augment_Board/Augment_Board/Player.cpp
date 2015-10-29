@@ -1,23 +1,49 @@
 #include "Player.h"
 #include "Gesture.h"
+#include "Colours.h"
 
-Player::Player(unsigned long int c, std::string n, Gesture g)
-	: colour(c), name(n), gesture(g)
+Player::Player(Tile::Type t, std::string n, Gesture g)
+	: faction(t), name(n), gesture(g)
 {
+	switch (faction)
+	{
+	case Tile::Type::BADLANDS:
+		colour = Colours::red; //RED
+		break;
+	case Tile::Type::LAKES:
+		colour = Colours::blue; //BLUE
+		break;
+	case Tile::Type::PLAINS:
+		colour = Colours::brown; //BROWN
+		break;
+	case Tile::Type::DESERT:
+		colour = Colours::yellow; //YELLOW
+		break;
+	case Tile::Type::FOREST:
+		colour = Colours::green; //GREEN
+		break;
+	case Tile::Type::SWAMPS:
+		colour = Colours::black; //BLACK LIKE MY SOUL
+		break;
+	case Tile::Type::MOUNTAINS:
+		colour = Colours::gray; //GRAY
+		break;
+	case Tile::Type::RIVER:
+		colour = Colours::teal; //TEAL
+		break;
+	default:
+		colour = Colours::white; //WHITE
+		break;
+	}
 }
 
 Player::~Player()
 {
 }
 
-unsigned long int Player::getColour()
+Tile::Type Player::getFaction()
 {
-	return colour;
-}
-
-void Player::setColour(unsigned long int c)
-{
-	colour = c;
+	return faction;
 }
 
 std::string Player::getName()
