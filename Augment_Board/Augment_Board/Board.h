@@ -3,18 +3,19 @@
 #define BOARD_H
 
 #include "Gesture.h"
+#include "Hex.h"
 
 class Board
 {
 private:
-	Hex hex[];
+	Hex* hex;
 	Gesture terraform;
 
 public:
-	Board(Hex hex[], Gesture terraform);
+	Board(Hex* hex, Gesture terraform);
 	~Board();
 
-	void buildBoard(Hex hex[], Gesture gesture);
+	void buildBoard(Hex* hex, Gesture gesture);
 };
 
 #endif

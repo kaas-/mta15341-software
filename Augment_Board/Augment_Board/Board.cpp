@@ -1,7 +1,7 @@
 #include "Board.h"
 #include "Gesture.h"
 
-Board::Board(Hex h, Gesture g)
+Board::Board(Hex h[112], Gesture g)
 	: hex(h), terraform(g)
 {
 }
