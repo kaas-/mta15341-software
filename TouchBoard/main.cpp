@@ -1,25 +1,26 @@
 #include "opencv2/opencv.hpp"
+#include "Segment.h"
 
 using namespace cv;
+using namespace std;
+using namespace Segment;
 
 int main(int, char)
 {
-	VideoCapture cap(0); // open the default camera
-	if (!cap.isOpened()) // check if we succeeded
-		return -1;
-	Mat edges;
-	namedWindow("edges", 1);
-	for (;;)
-	{
-		Mat frame;
-		cap >> frame; // get a new frame from camera
-		cvtColor(frame, edges, CV_BGR2GRAY);
-		GaussianBlur(edges, edges, Size(7, 7), 1.5, 1.5);
-		Canny(edges, edges, 0, 30, 3);
-		imshow("edges", edges);
-		if (waitKey(30) >= 0)
-			break;
-	}
+	Mat originalImage = imread("image1.jpg", CV_LOAD_IMAGE_COLOR);
+	imshow("Original", originalImage);
+
+	Mat gray = rgb2gray(originalImage);
+	imshow("B&W", gray);
+	GaussianBlur(gray, gray, Size(7, 7), 1.5, 1.5);
+	array<int, 256> frameHistogram = getHistogram(gray);
+	int frameOtsu = getBestOtsuScore(frameHistogram);
+	Mat segmented = thresholdImg(gray, frameOtsu);
+
+
+	imshow("Segmented", segmented);
+	waitKey(0);
+	
 	// the camera will be deinitialized automatically in VideoCapture destructor
 	return 0;
 }

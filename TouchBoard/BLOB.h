@@ -1,6 +1,5 @@
 #ifndef BLOB_H
 #define BLOB_H
-#endif
 
 #include "opencv2/opencv.hpp"
 
@@ -21,4 +20,4 @@ public:
 	cv::Mat getBLOBImage() { return thisBLOB; };
 	double compareTo(BLOB otherBLOB);
 };
-
+#endif

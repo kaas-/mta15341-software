@@ -1,6 +1,5 @@
 #ifndef HEX_H
 #define HEH_H
-#endif
 
 #include <array>
 
@@ -19,3 +18,4 @@ public:
 	std::array<int, 2> getPosition() { return position; };
 
 };
+#endif
