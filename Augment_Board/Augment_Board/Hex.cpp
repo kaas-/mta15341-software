@@ -27,6 +27,7 @@ Tile::Type Hex::getTileType()
 	return TileType;
 }
 
+//here we get a tile type from the tile.h and return a string with its name
 const char* Hex::getTileName()
 {
 	switch (TileType)
@@ -61,12 +62,14 @@ const char* Hex::getTileName()
 	}
 }
 
+//the tile type we just got is then assigned to a hex object
 void Hex::setTileType(Tile::Type t)
 {
 	TileType = t;
 	filterColour();
 }
 
+//this takes the type of the hex, and assigns it a corresponding colour, just like in player.cpp
 void Hex::filterColour()
 {
 	switch (TileType)

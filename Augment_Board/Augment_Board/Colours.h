@@ -5,6 +5,7 @@
 class Colours
 {
 public:
+	//makes a list of colours, and defines the hex codes for each colour
 	static const unsigned long int white = 0xFFFFFF;
 	static const unsigned long int black = 0x000000;
 	static const unsigned long int red = 0xff0000;

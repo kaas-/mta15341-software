@@ -20,11 +20,13 @@ int runWebcam();
 int main(int, char)
 {
 	board.buildBoard(gesture);
-
+	//prints out the type and colour of hex #100
 	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour() << "\n";
+	//makes a new hex and gives it the type LAKE, then puts it in #100
 	Hex newHex;
 	newHex.setTileType(Tile::Type::LAKES);
 	board.setHex(newHex, 100);
+	//prints out hex #100
 	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour();
 
 	cin.get();
