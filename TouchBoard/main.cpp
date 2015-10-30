@@ -7,19 +7,25 @@ using namespace Segment;
 
 int main(int, char)
 {
-	Mat originalImage = imread("image1.jpg", CV_LOAD_IMAGE_COLOR);
-	imshow("Original", originalImage);
-
-	Mat gray = rgb2gray(originalImage);
-	imshow("B&W", gray);
-	GaussianBlur(gray, gray, Size(7, 7), 1.5, 1.5);
-	array<int, 256> frameHistogram = getHistogram(gray);
-	int frameOtsu = getBestOtsuScore(frameHistogram);
-	Mat segmented = thresholdImg(gray, frameOtsu);
-
-
-	imshow("Segmented", segmented);
-	waitKey(0);
+	VideoCapture cap(0); // open the default camera
+	if (!cap.isOpened()) // check if we succeeded
+		return -1;
+	Mat edges;
+	array<int, 256> frameOtsu;
+	for (;;)
+	{
+		Mat frame;
+		cap >> frame; // get a new frame from camera
+		imshow("color", frame);
+		frame = rgb2gray(frame);
+		imshow("gray", frame);
+		GaussianBlur(frame, frame, Size(7, 7), 1.5, 1.5);
+		frameOtsu = getHistogram(frame);
+		frame = thresholdImg(frame, getBestOtsuScore(frameOtsu));
+		imshow("segment", frame);
+		if (waitKey(30) >= 0)
+			break;
+	}
 	
 	// the camera will be deinitialized automatically in VideoCapture destructor
 	return 0;
