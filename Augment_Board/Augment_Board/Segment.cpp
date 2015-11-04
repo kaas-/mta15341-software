@@ -162,3 +162,79 @@ Mat Segment::medianFilter(Mat src, int radius)
 
 	return src;
 }
+
+Mat Segment::erode(Mat src, int kernRad) {
+
+	Mat output;
+	int Temp = 0;
+
+	//Quadra for loops that takes every single kernel, for every valid pixel
+	for (int y = 0 + kernRad; y < src.rows - kernRad; ++y)
+	{
+		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
+		{
+			for (int ky = y - kernRad; ky < y + kernRad; ++ky)
+			{
+				for (int kx = x - kernRad; kx < x + kernRad; ++kx)
+				{
+					if (src.at<uchar>(ky, kx) == 255) {
+						Temp++;
+					}
+				}
+			}
+		//if all the pixels are value 255, give the output pixel greyscale value of 255
+			if (Temp == 9){
+				output.at<uchar>(y, x) = 255;
+			}
+		//else, give it 0
+			else {
+				output.at<uchar>(y, x) = 0;
+			}
+
+		}
+	}
+
+}
+
+
+Mat Segment::dilate(Mat src, int kernRad) {
+
+	Mat output;
+	int Temp = 0;
+
+	//Quadra for loops that takes every single kernel, for every valid pixel
+	for (int y = 0 + kernRad; y < src.rows - kernRad; ++y)
+	{
+		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
+		{
+			for (int ky = y - kernRad; ky < y + kernRad; ++ky)
+			{
+				for (int kx = x - kernRad; kx < x + kernRad; ++kx)
+				{
+					if (src.at<uchar>(ky, kx) == 255) {
+						Temp++;
+					}
+				}
+			}
+			//if one of the pixels are value 255, give the output pixel greyscale value of 255
+			if (Temp >= 9){
+				output.at<uchar>(y, x) = 255;
+			}
+			//else, give it 0
+			else {
+				output.at<uchar>(y, x) = 0;
+			}
+
+		}
+	}
+}
+
+/*
+Mat Segment::open(Mat src){
+
+}
+
+Mat Segment::close(Mat src){
+
+}
+*/
