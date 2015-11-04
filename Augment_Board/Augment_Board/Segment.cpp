@@ -162,3 +162,32 @@ Mat Segment::medianFilter(Mat src, int radius)
 
 	return src;
 }
+
+void Segment::burn(Mat src, int x, int y)
+{
+
+	if (src.at<uchar>(y, x) > 0 && src.at<uchar>(y, x) < 255)
+	{
+		return;
+	}
+
+	if (src.at<uchar>(y, x) == 0)
+	{
+		src.at<uchar>(y, x) = 10;
+		burn(src, x, y - 1);
+		burn(src, x - 1, y);
+		burn(src, x, y + 1);
+		burn(src, x + 1, y);
+	}
+
+	if (src.at<uchar>(y, x) == 255)
+	{
+		grassFire(src, y, x);
+	}
+
+}
+
+Mat grassFire(Mat src, int x, int y)
+{
+	return src;
+}

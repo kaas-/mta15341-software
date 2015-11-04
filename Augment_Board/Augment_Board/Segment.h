@@ -14,6 +14,7 @@ namespace Segment {
 	cv::Mat medianFilter(cv::Mat src, int radius);
 	cv::Mat dilate(cv::Mat src, int radius);
 	cv::Mat erode(cv::Mat src, int radius);
-	
+	void burn(cv::Mat src, int x, int y);
+	cv::Mat grassFire(cv::Mat src, int x, int y);
 }
 #endif
