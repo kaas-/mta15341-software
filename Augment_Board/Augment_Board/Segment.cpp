@@ -183,7 +183,7 @@ Mat Segment::erode(Mat src, int kernRad) {
 				}
 			}
 			//if all the pixels are value 255, give the output pixel greyscale value of 255
-			if (Temp == 9){
+			if (Temp == 9){ //square(kernRad*2+1)
 				output.at<uchar>(y, x) = 255;
 			}
 			//else, give it 0
