@@ -1,6 +1,7 @@
 #include "opencv2/opencv.hpp"
 #include <array>
-#include "Segment.h""
+//#include <math.h>
+#include "Segment.h"
 
 using namespace cv;
 using namespace std;
@@ -165,17 +166,18 @@ Mat Segment::medianFilter(Mat src, int radius)
 
 Mat Segment::erode(Mat src, int kernRad) {
 
-	Mat output;
+	Mat output = src.clone();
 	int Temp = 0;
+	int kernPixels = pow(kernRad * 2 + 1, 2);
 
 	//Quadra for loops that takes every single kernel, for every valid pixel
 	for (int y = 0 + kernRad; y < src.rows - kernRad; ++y)
 	{
 		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
 		{
-			for (int ky = y - kernRad; ky < y + kernRad; ++ky)
+			for (int ky = y - kernRad; ky <= y + kernRad; ++ky)
 			{
-				for (int kx = x - kernRad; kx < x + kernRad; ++kx)
+				for (int kx = x - kernRad; kx <= x + kernRad; ++kx)
 				{
 					if (src.at<uchar>(ky, kx) == 255) {
 						Temp++;
@@ -183,23 +185,23 @@ Mat Segment::erode(Mat src, int kernRad) {
 				}
 			}
 			//if all the pixels are value 255, give the output pixel greyscale value of 255
-			if (Temp == 9){
+			if (Temp == kernPixels){
 				output.at<uchar>(y, x) = 255;
 			}
 			//else, give it 0
 			else {
 				output.at<uchar>(y, x) = 0;
 			}
-
+			Temp = 0;
 		}
 	}
-
+	return output;
 }
 
 
 Mat Segment::dilate(Mat src, int kernRad) {
 
-	Mat output;
+	Mat output = src.clone();
 	int Temp = 0;
 
 	//Quadra for loops that takes every single kernel, for every valid pixel
@@ -207,9 +209,9 @@ Mat Segment::dilate(Mat src, int kernRad) {
 	{
 		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
 		{
-			for (int ky = y - kernRad; ky < y + kernRad; ++ky)
+			for (int ky = y - kernRad; ky <= y + kernRad; ++ky)
 			{
-				for (int kx = x - kernRad; kx < x + kernRad; ++kx)
+				for (int kx = x - kernRad; kx <= x + kernRad; ++kx)
 				{
 					if (src.at<uchar>(ky, kx) == 255) {
 						Temp++;
@@ -217,43 +219,67 @@ Mat Segment::dilate(Mat src, int kernRad) {
 				}
 			}
 			//if one of the pixels are value 255, give the output pixel greyscale value of 255
-			if (Temp >= 9){
+			if (Temp != 0){
 				output.at<uchar>(y, x) = 255;
 			}
 			//else, give it 0
 			else {
 				output.at<uchar>(y, x) = 0;
 			}
+			Temp = 0;
 
 		}
 	}
+	return output;
 }
 
-void Segment::burn(Mat src, int x, int y)
+void Segment::burn(Mat src)
 {
-
-	if (src.at<uchar>(y, x) > 0 && src.at<uchar>(y, x) < 255)
+	int blobCount = 0;
+	for (int y = 0; y < src.rows; ++y)
 	{
-		return;
+		for (int x = 0; x < src.cols; ++x)
+		{
+			if (src.at<uchar>(y, x) == 255)
+			{
+				//grassFire(src, x, y, blobCount, true);
+			}
+		}
 	}
+	
+	return;
+}
 
-	if (src.at<uchar>(y, x) == 0)
-	{
-		src.at<uchar>(y, x) = 10;
-		burn(src, x, y - 1);
-		burn(src, x - 1, y);
-		burn(src, x, y + 1);
-		burn(src, x + 1, y);
-	}
-
+/*void grassFire(Mat src, int x, int y, int blobCount, bool init)
+{
 	if (src.at<uchar>(y, x) == 255)
 	{
-		grassFire(src, y, x);
+		if (init)
+		{
+			blobCount++;
+		}
+		src.at<uchar>(y, x) = 255 - blobCount;
+		grassFire(src, x - 1, y, blobCount, false);
+		grassFire(src, x + 1, y, blobCount, false);
+		grassFire(src, x, y - 1, blobCount, false);
+		grassFire(src, x, y + 1, blobCount, false);
 	}
+	return;
+}*/
 
-}
-
-Mat grassFire(Mat src, int x, int y)
+Mat Segment::normalizeImage(Mat src, double newMax, double newMin)
 {
-	return src;
+	double min, max;
+	minMaxLoc(src, &min, &max);
+	Mat output = src.clone();
+
+	for (int y = 0; y < src.rows; ++y)
+	{
+		for (int x = 0; x < src.cols; ++x)
+		{
+			output.at<uchar>(y, x) = floor((src.at<uchar>(y, x) - min) * (newMax - newMin) / (max - min) + newMin);
+
+		}
+	}
+	return output;
 }

@@ -1,9 +1,11 @@
 #include "opencv2/opencv.hpp"
 #include "Player.h"
 #include "Board.h"
+#include "Segment.h"
 
 using namespace cv;
 using namespace std;
+using namespace Segment;
 
 Mat image;
 Gesture gesture(image, image);
@@ -19,7 +21,7 @@ int runWebcam();
 
 int main(int, char)
 {
-	board.buildBoard(gesture);
+	/*board.buildBoard(gesture);
 	//prints out the type and colour of hex #100
 	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour() << "\n";
 	//makes a new hex and gives it the type LAKE, then puts it in #100
@@ -30,7 +32,23 @@ int main(int, char)
 	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour();
 
 	cin.get();
-	cin.get();
+	cin.get();*/
+	
+	image = imread("trees06.jpg", CV_LOAD_IMAGE_COLOR);
+	image = rgb2gray(image);
+	array<int, 256> histogram = getHistogram(image);
+	int otsu = getBestOtsuScore(histogram);
+	thresholdImg(image, otsu);
+
+	imshow("theshold", image);
+
+	image = erode(image, 1);
+	imshow("eroded", image);
+
+	image = dilate(image, 1);
+	imshow("dilated", image);
+	waitKey(0);
+
 	return 0;
 }
 
