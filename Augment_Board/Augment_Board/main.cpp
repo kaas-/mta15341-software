@@ -8,9 +8,12 @@ using namespace std;
 using namespace Segment;
 
 Mat image;
+int dilation_size = 3;
 Gesture gesture(image, image);
-Player currentPlayer(Tile::Type::BADLANDS,"GIANTS",gesture);
+Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
+Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
+
 Board board(gesture);
 
 Hex findCurrentHex(Board currentBoard);
@@ -33,7 +36,7 @@ int main(int, char)
 
 	cin.get();
 	cin.get();*/
-	
+	/*
 	image = imread("trees06.jpg", CV_LOAD_IMAGE_COLOR);
 	image = rgb2gray(image);
 	array<int, 256> histogram = getHistogram(image);
@@ -49,24 +52,41 @@ int main(int, char)
 	imshow("dilated", image);
 	waitKey(0);
 
-	return 0;
+	return 0;*/
+	runWebcam();
 }
 
 int runWebcam()
 {
-	VideoCapture cap(0); // open the default camera
+	VideoCapture cap(1); // open the default camera
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
-	Mat edges;
-	namedWindow("edges", 1);
+	Mat blur;
+	Mat thres;
+	Mat eroded;
 	for (;;)
 	{
 		Mat frame;
 		cap >> frame; // get a new frame from camera
-		cvtColor(frame, edges, CV_BGR2GRAY);
-		GaussianBlur(edges, edges, Size(7, 7), 1.5, 1.5);
-		Canny(edges, edges, 0, 30, 3);
-		imshow("edges", edges);
+		cvtColor(frame, frame, CV_BGR2GRAY);
+		//GaussianBlur(frame, blur, Size(19, 19), 1.5, 1.5);
+		//threshold(blur, thres, 25, 255, THRESH_BINARY);
+		GaussianBlur(frame, blur, Size(3, 3),1.5,1.5);
+		//threshold(blur, thres, 0, 255, THRESH_BINARY | THRESH_OTSU);
+		adaptiveThreshold(blur, thres, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 75, 0);
+		//medianBlur(frame, frame, 3);
+		//cv::erode(thres, eroded, element);
+		morphologyEx(thres, eroded, MORPH_OPEN, element);
+		morphologyEx(eroded, eroded, MORPH_OPEN, element);
+		morphologyEx(eroded, eroded, MORPH_OPEN, element);
+		medianBlur(eroded, eroded, 13);
+		morphologyEx(eroded, eroded, MORPH_CLOSE, element);
+		morphologyEx(eroded, eroded, MORPH_CLOSE, element);
+		morphologyEx(eroded, eroded, MORPH_CLOSE, element);
+		imshow("orig-grey", frame);
+		imshow("blur", blur);
+		imshow("thres", thres);
+		imshow("eroded", eroded);
 		if (waitKey(30) >= 0)
 			break;
 	}
