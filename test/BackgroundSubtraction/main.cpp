@@ -160,7 +160,7 @@ Mat buildBlurringKernel(){
 	return blurringKernel;
 }
 
-int buildGaussianFilter(Mat blurringKernel){
+int buildGaussianFilter(Mat blurringKernel){ 
 
 	int blurringKernelSum = 0;
 
