@@ -53,7 +53,14 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-	runWebcam();
+	//runWebcam();
+
+	board.buildBoard();
+	
+
+	cin.get();
+	cin.get();
+	return 0;
 }
 
 int runWebcam()

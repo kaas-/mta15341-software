@@ -6,6 +6,7 @@
 Player::Player(Tile::Type t, std::string n, Gesture g)
 	: faction(t), name(n), gesture(g)
 {
+	Colours hello; 
 	//takes the tile type assigned to the player, and gives it a coresponding colour, just like in hex.cpp
 	switch (faction)
 	{
@@ -28,7 +29,7 @@ Player::Player(Tile::Type t, std::string n, Gesture g)
 		colour = Colours::black; //BLACK LIKE MY SOUL
 		break;
 	case Tile::Type::MOUNTAINS:
-		colour = Colours::gray; //GRAY
+		colour = hello.gray; //GRAY
 		break;
 	case Tile::Type::RIVER:
 		colour = Colours::teal; //TEAL
