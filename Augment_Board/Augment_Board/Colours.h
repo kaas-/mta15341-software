@@ -12,7 +12,8 @@ public:
 	static const unsigned long int blue = 0x0066FF;
 	static const unsigned long int green = 0x00CC00;
 	static const unsigned long int yellow = 0xFFFF00;
-	static const unsigned long int gray = 0x808080;
+	const cv::Scalar gray = cv::Scalar(179, 179, 179);
+	
 	static const unsigned long int brown = 0x7A5230;
 	static const unsigned long int teal = 0x4CA6A6;
 };
