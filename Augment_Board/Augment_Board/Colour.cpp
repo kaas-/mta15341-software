@@ -1,16 +1,17 @@
-#pragma once
-#ifndef COLOURS_H
-#define COLOURS_H
+#include "Colour.h"
 
-#include <opencv/cv.h>
-#include "Tile.h"
 
-class Colours
+Colour::Colour()
 {
-private:
-	cv::Scalar colour;
+}
 
-public:
+
+Colour::~Colour()
+{
+}
+
+void filterColour()
+{
 	/*
 	//makes a list of colours, and defines the hex codes for each colour
 	static const unsigned long int white = 0xFFFFFF;
@@ -24,7 +25,7 @@ public:
 	static const unsigned long int teal = 0x4CA6A6;
 	*/
 
-	
+
 	const cv::Scalar black = cv::Scalar(0, 0, 0);
 	const cv::Scalar red = cv::Scalar(0, 0, 255);
 	const cv::Scalar blue = cv::Scalar(255, 102, 0);
@@ -34,39 +35,37 @@ public:
 	const cv::Scalar grey = cv::Scalar(179, 179, 179);
 	const cv::Scalar teal = cv::Scalar(166, 166, 76);
 	const cv::Scalar white = cv::Scalar(255, 255, 255);
-	
-	void filterColour()
-	{
-		switch (Tile::Type)
+
+	switch (Tile::Type)
 		{
 		case Tile::Type::BADLANDS:
 			colour = red; //RED
 			break;
 		case Tile::Type::LAKES:
-			colour = Colours::blue; //BLUE
+			colour = Colour::blue; //BLUE
 			break;
 		case Tile::Type::PLAINS:
-			colour = Colours::brown; //BROWN
+			colour = Colour::brown; //BROWN
 			break;
 		case Tile::Type::DESERT:
-			colour = Colours::yellow; //YELLOW
+			colour = Colour::yellow; //YELLOW
 			break;
 		case Tile::Type::FOREST:
-			colour = Colours::green; //GREEN
+			colour = Colour::green; //GREEN
 			break;
 		case Tile::Type::SWAMPS:
-			colour = Colours::black; //BLACK LIKE MY SOUL
+			colour = Colour::black; //BLACK LIKE MY SOUL
 			break;
 		case Tile::Type::MOUNTAINS:
-			colour = Colours::grey; //GRAY
+			colour = Colour::grey; //GRAY
 			break;
 		case Tile::Type::RIVER:
-			colour = Colours::teal; //TEAL
+			colour = Colour::teal; //TEAL
 			break;
 		default:
-			colour = Colours::white; //WHITE
+			colour = Colour::white; //WHITE
 			break;
-		}
+		
 	}
-};
-#endif
+}
+
