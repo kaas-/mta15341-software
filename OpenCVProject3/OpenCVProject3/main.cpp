@@ -67,12 +67,11 @@ const int colour = 0x000000;*/
 
 int main() {
 	Mat image;
-	image = imread("hvid.jpg", CV_LOAD_IMAGE_COLOR);
+	image = imread("hvid.png", CV_LOAD_IMAGE_COLOR);
 	if (image.data && !image.empty()){
 	
-		Mat image;
-		image = imread("hvid.jpg", CV_LOAD_IMAGE_COLOR);
-		int* anchors = new int[13];
+		
+		//int* anchors = new int[13];
 		int x1 = 100;
 		int x2 = 87;
 		int x3 = 100;
@@ -94,6 +93,8 @@ int main() {
 		int y8 = 257;
 		int y9 = 280;
 		
+
+
 		Scalar colours[112] = { Scalar(0, 75, 150), Scalar(255, 255, 0), Scalar(0, 75, 150), Scalar(0, 0, 0), Scalar(0, 255, 255), Scalar(255, 255, 0), Scalar(179, 179, 179), Scalar(0, 189, 0), Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(255, 0, 0) ,
 								Scalar(0, 0, 255),Scalar(0, 255, 255),Scalar(255, 255, 0),Scalar(255, 0, 0),Scalar(179, 179, 179),Scalar(0, 0, 255),Scalar(255, 255, 0),Scalar(255, 255, 0),Scalar(255, 255, 0),Scalar(0, 255, 255),Scalar(0, 75, 150),Scalar(0, 0, 0),Scalar(179, 179, 179),
 								Scalar(0, 189, 0),Scalar(0, 0, 0),Scalar(255, 255, 0),Scalar(255, 255, 0),Scalar(255, 255, 0),Scalar(0, 75, 150),Scalar(0, 189, 0),Scalar(0, 255, 255),Scalar(255, 255, 0),Scalar(255, 255, 0),Scalar(255, 255, 0),Scalar(255, 255, 0),
@@ -105,48 +106,48 @@ int main() {
 								Scalar(179, 179, 179),Scalar(0, 189, 0),Scalar(255, 255, 0),Scalar(0, 0, 255),Scalar(0, 255, 255),Scalar(0, 0, 0),Scalar(0, 255, 255),Scalar(255, 255, 0),Scalar(255, 0, 0),Scalar(0, 75, 150),Scalar(255, 255, 0),Scalar(0, 75, 150)};
 		for (int i = 0; i < 12; i++){
 			x1 += 2 * 13;
-			anchors[i] = x1;
+			//anchors[i] = x1;
 			drawHex(x1, y1, 13, image, colours[i]);
 		}
 		for (int i = 12; i < 25; i++){
 			x2 += 2 * 13;
-			anchors[i] = x2;
+			//anchors[i] = x2;
 			drawHex(x2, y2, 13, image, colours[i]);
 		}
 		
 		for (int i = 25; i < 37; i++){
 			x3 += 2 * 13;
-			anchors[i] = x3;
+			//anchors[i] = x3;
 			drawHex(x3, y3, 13, image, colours[i]);
 		}
 		for (int i = 37; i < 50; i++){
 			x4 += 2 * 13;
-			anchors[i] = x4;
+			//anchors[i] = x4;
 			drawHex(x4, y4, 13, image, colours[i]);
 		}
 		for (int i = 50; i < 62; i++){
 			x5 += 2 * 13;
-			anchors[i] = x5;
+			//anchors[i] = x5;
 			drawHex(x5, y5, 13, image, colours[i]);
 		}
 		for (int i = 62; i < 75; i++){
 			x6 += 2 * 13;
-			anchors[i] = x6;
+			//anchors[i] = x6;
 			drawHex(x6, y6, 13, image, colours[i]);
 		}
 		for (int i = 75; i < 87; i++){
 			x7 += 2 * 13;
-			anchors[i] = x7;
+			//anchors[i] = x7;
 			drawHex(x7, y7, 13, image, colours[i]);
 		}
 		for (int i = 87; i < 100; i++){
 			x8 += 2 * 13;
-			anchors[i] = x8;
+			//anchors[i] = x8;
 			drawHex(x8, y8, 13, image, colours[i]);
 		}
 		for (int i = 100; i <= 111; i++){
 			x9 += 2 * 13;
-			anchors[i] = x9;
+			//anchors[i] = x9;
 			drawHex(x9, y9, 13, image, colours[i]);
 		}
 
@@ -159,10 +160,14 @@ int main() {
 		drawHexRow(200, 235, 13, image, 0x000000, 13);
 		drawHexRow(213, 257, 13, image, 0xff0000, 12);
 		drawHexRow(200, 280, 13, image, 0x000000, 13);*/
-
+		
 			
 			imshow("Hello world!", image);	
-	
+
+		//int test;
+		//cin >> test;
+
+		
 	}
 	waitKey(0);
 }
