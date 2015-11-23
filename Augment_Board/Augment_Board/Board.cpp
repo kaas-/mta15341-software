@@ -174,6 +174,7 @@ void Board::buildBoard()
 }
 void Board::drawBoard(){
 	Mat image;
+	Hex hello;
 	image = imread("hvid.jpg", CV_LOAD_IMAGE_COLOR);
 	//int* anchors = new int[13];
 	int x1 = 100;
@@ -184,55 +185,58 @@ void Board::drawBoard(){
 	for (int i = 0; i < 13; i++){
 		x1 += 2 * 13;
 		//anchors[i] = x1;
-		drawHex(x1, y, h, image, hexArray[i].getTileType());
+		hello.drawHex(x1, y, h, image, hexArray[i].getTileType());
 	}
 	for (int i = 12; i < 25; i++){
 		x2 += 2 * 13;
 		//anchors[i] = x2;
-		drawHex(x2, y + (3 / 2)*r, h, image, hexArray[i].getTileType());
+		hello.drawHex(x2, y + (3 / 2)*r, h, image, hexArray[i].getTileType());
 	}
 	for (int i = 0; i < 13; i++){
 		x1 = 100;
 		x1 += 2 * 13;
 		//anchors[i] = x1;
-		drawHex(x1, y + 3 * r, h, image, hexArray[i].getTileType());
-	}
-	for (int i = 12; i < 25; i++){
-		x2 = 87;
-		x2 += 2 * 13;
-		//anchors[i] = x2;
-		drawHex(x2, y + (9 / 2)*r, h, image, hexArray[i].getTileType());
-	}
-	for (int i = 0; i < 13; i++){
-		x1 = 100;
-		x1 += 2 * 13;
-		//anchors[i] = x1;
-		drawHex(x1, y + 6 * r, h, image, hexArray[i].getTileType());
+		hello.drawHex(x1, y + 3 * r, h, image, hexArray[i].getTileType());
 	}
 	for (int i = 12; i < 25; i++){
 		x2 = 87;
 		x2 += 2 * 13;
 		//anchors[i] = x2;
-		drawHex(x2, y + (15 / 2)*r, h, image, hexArray[i].getTileType());
+		hello.drawHex(x2, y + (9 / 2)*r, h, image, hexArray[i].getTileType());
 	}
 	for (int i = 0; i < 13; i++){
 		x1 = 100;
 		x1 += 2 * 13;
 		//anchors[i] = x1;
-		drawHex(x1, y + 9 * r, h, image, hexArray[i].getTileType());
+		hello.drawHex(x1, y + 6 * r, h, image, hexArray[i].getTileType());
 	}
 	for (int i = 12; i < 25; i++){
 		x2 = 87;
 		x2 += 2 * 13;
 		//anchors[i] = x2;
-		drawHex(x2, y + (21 / 2)*r, h, image, hexArray[i].getTileType());
+		hello.drawHex(x2, y + (15 / 2)*r, h, image, hexArray[i].getTileType());
 	}
 	for (int i = 0; i < 13; i++){
 		x1 = 100;
 		x1 += 2 * 13;
 		//anchors[i] = x1;
-		drawHex(x1, y + 12 * r, h, image, hexArray[i].getTileType());
+		hello.drawHex(x1, y + 9 * r, h, image, hexArray[i].getTileType());
 	}
+	for (int i = 12; i < 25; i++){
+		x2 = 87;
+		x2 += 2 * 13;
+		//anchors[i] = x2;
+		hello.drawHex(x2, y + (21 / 2)*r, h, image, hexArray[i].getTileType());
+	}
+	for (int i = 0; i < 13; i++){
+		x1 = 100;
+		x1 += 2 * 13;
+		//anchors[i] = x1;
+		hello.drawHex(x1, y + 12 * r, h, image, hexArray[i].getTileType());
+	}
+	imshow("Terra Mystica Board", image);
+
+	waitKey(0);
 }
 //getters and setters for hex
 Hex Board::getHex(int position)

@@ -1,5 +1,5 @@
 #include "Hex.h"
-#include "Colours.h"
+#include "Colour.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp" 
 #include "opencv2/highgui/highgui.hpp"
@@ -77,7 +77,7 @@ void Hex::setTileType(Tile::Type t)
 //this takes the type of the hex, and assigns it a corresponding colour, just like in player.cpp
 void Hex::filterColour()
 {
-	Colours hello;
+	/*Colours hello;
 	switch (TileType)
 	{
 	case Tile::Type::BADLANDS:
@@ -107,7 +107,7 @@ void Hex::filterColour()
 	default:
 		colour = Colours::white; //WHITE
 		break;
-	}
+	}*/
 }
 
 //This draws the actual hex

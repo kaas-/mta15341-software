@@ -22,7 +22,6 @@ public:
 	void drawBoard();
 	Hex getHex(int);
 	void setHex(Hex, int);
-	Hex drawHex(int x, int y, float h, Mat image, Tile::Type tiletype);
 
 };
 
