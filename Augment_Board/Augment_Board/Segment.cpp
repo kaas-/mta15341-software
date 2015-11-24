@@ -314,7 +314,6 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 
 	pointStack.push(point);
 	src.at<uchar>(point) = 1;
-	int pops = 0;
 
 	bool done = false;
 	while (!done)
@@ -340,30 +339,16 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 			}
 			else if (src.at<uchar>(point.y, point.x + 1) == 255)
 			{
-				//cout << "!Pixel before: " << (int)src.at<uchar>(point.y, point.x + 1) << " at " << point.x << ", " << point.y << endl;
 				point = Point(point.x + 1, point.y);
 
 				src.at<uchar>(point.y, point.x) = 1;
-				//cout << "!Pixel: " << (int)src.at<uchar>(point.y, point.x) << endl;
 				pointStack.push(point);
 			}
 			else
 			{
-				//cout << "Pixel before: " << (int)src.at<uchar>(point.y, point.x) << " at " << point.x << ", " << point.y << endl;
 				src.at<uchar>(point.y, point.x) = 0;
-				//cout << "Pixel: " << (int)src.at<uchar>(point.y, point.x) << endl;
 
-				//cout << pointStack.getTop()->point << endl;
 				points.push_front(pointStack.pop());
-				pops++;
-				//cout << pointStack.getTop()->point << endl;
-				//cout << pops << " pops, " << pointStack.getCount() << " elements" << endl;
-
-				/*if (pops % 1000 == 0)
-				{
-					imshow("image", src);
-					waitKey(0);
-				}*/
 
 				if (pointStack.getTop() != NULL)
 				{
@@ -379,91 +364,11 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 		{
 			cout << "EXCEPTION: " << e.msg << endl;
 			point = pointStack.pop();
-			pops++;
-			//waitKey(0);
 		}
 		
 
 	} 
 	
-	/*if (x < 0 || x >= src.cols || y < 0 || y >= src.rows)
-	{
-		points.clear();
-		return points;
-	}
-
-	if (src.at<uchar>(y, x) == 255)
-	{
-		if (init)
-		{
-			blobCount++;
-		}
-		try {
-			src.at<uchar>(y, x) = 255 - blobCount;
-			points.push_front({ y, x });
-		}
-		catch (Exception e)
-		{
-			cout << e.msg;
-			return points;
-		}
-		
-		try {
-			points.splice(points.end(), grassFireImage(src, x - 1, y, blobCount, false, iterator));
-			points.splice(points.end(), grassFireImage(src, x + 1, y, blobCount, false, iterator));
-			points.splice(points.end(), grassFireImage(src, x, y - 1, blobCount, false, iterator));
-			points.splice(points.end(), grassFireImage(src, x, y + 1, blobCount, false, iterator));
-
-		}
-		catch (Exception e)
-		{
-			return points;
-		}
-	}*/
-//	bool done = false;
-//	blobCount++;
-
-	/*while (!done)
-	{
-		cout << iterator++ << endl;
-		try {
-			src.at<uchar>(y, x) = 255 - blobCount;
-			points.push_front({ y, x });
-		}
-		catch (Exception e)
-		{
-			cout << e.msg;
-			return points;
-		}
-
-		if (src.at<uchar>(y - 1, x) == 255 && y >= 0)
-		{
-			y = y - 1;
-			continue;
-		}
-		else if (src.at<uchar>(y + 1, x) == 255 && y < src.rows)
-		{
-			y += 1;
-			continue;
-		}
-		else if (src.at<uchar>(y, x - 1) == 255 && x >= 0)
-		{
-			x = x - 1;
-			continue;
-		}
-		else if (src.at<uchar>(y, x + 1) == 255 && x < src.cols)
-		{
-			x += 1;
-			continue;
-		}
-		else
-		{
-			done = true;
-		}
-	}*/
-
-
-
 	return points;
 }
 
