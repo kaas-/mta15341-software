@@ -1,12 +1,12 @@
 #include "Player.h"
 #include "Gesture.h"
-#include "Colours.h"
+#include "Colour.h"
 
 //a Player object consists of a tile type (for colour), a string (for name), and a gesture (for starting and ending turns)
 Player::Player(Tile::Type t, std::string n, Gesture g)
 	: faction(t), name(n), gesture(g)
 {
-	Colours hello; 
+	/*Colours hello; 
 	//takes the tile type assigned to the player, and gives it a coresponding colour, just like in hex.cpp
 	switch (faction)
 	{
@@ -37,7 +37,7 @@ Player::Player(Tile::Type t, std::string n, Gesture g)
 	default:
 		colour = Colours::white; //WHITE
 		break;
-	}
+	}*/
 }
 
 Player::~Player()

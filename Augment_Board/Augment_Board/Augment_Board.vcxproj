@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Gesture.cpp" />
     <ClCompile Include="Hex.cpp" />
     <ClCompile Include="main.cpp" />
@@ -20,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Colours.h" />
+    <ClInclude Include="Colour.h" />
     <ClInclude Include="Gesture.h" />
     <ClInclude Include="Hex.h" />
     <ClInclude Include="Player.h" />
