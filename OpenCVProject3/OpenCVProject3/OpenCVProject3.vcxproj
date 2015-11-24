@@ -11,28 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Colour.cpp" />
-    <ClCompile Include="Gesture.cpp" />
-    <ClCompile Include="Hex.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Segment.cpp" />
-    <ClCompile Include="Stack.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Colour.h" />
-    <ClInclude Include="Gesture.h" />
-    <ClInclude Include="Hex.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Segment.h" />
-    <ClInclude Include="Stack.h" />
-    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FD539F90-8A82-45B6-852F-AEFE536C88FE}</ProjectGuid>
-    <RootNamespace>Augment_Board</RootNamespace>
+    <RootNamespace>OpenCVProject3</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

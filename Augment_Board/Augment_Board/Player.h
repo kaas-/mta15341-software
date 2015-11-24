@@ -6,11 +6,12 @@
 #include "Gesture.h"
 #include "Tile.h"
 
+
 class Player
 {
 private:
 	Tile::Type faction;
-	unsigned long int colour;
+	cv::Scalar colour;
 	std::string name;
 	Gesture gesture;
 

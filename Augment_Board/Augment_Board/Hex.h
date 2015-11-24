@@ -3,23 +3,31 @@
 #define HEX_H
 
 #include "Tile.h"
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/imgproc.hpp" 
+#include "opencv2/highgui/highgui.hpp"
+
+
+using namespace std;
+using namespace cv;
 
 class Hex
 {
 private:
 	Tile::Type TileType;
-	unsigned long int colour;
+	cv::Scalar colour;
 
 public:
-	Hex(/*Tile::Type TileType*/);
+	Hex();
+	Hex(Tile::Type TileType);
 	~Hex();
 
-	unsigned long int getColour();
-	void setColour(unsigned long int colour);
+	cv::Scalar getColour();
+	void setColour(cv::Scalar colour);
 	Tile::Type getTileType();
 	void setTileType(Tile::Type);
 	const char* getTileName();
-	void filterColour();
+	void drawHex(int x, int y, float h, Mat image, Tile::Type tiletype);
 };
 
 #endif

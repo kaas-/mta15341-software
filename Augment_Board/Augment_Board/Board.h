@@ -5,6 +5,9 @@
 #include "Gesture.h"
 #include "Hex.h"
 
+using namespace std;
+using namespace cv;
+
 class Board
 {
 private:
@@ -15,7 +18,8 @@ public:
 	Board(Gesture terraform);
 	~Board();
 
-	void buildBoard(Gesture);
+	void buildBoard();
+	void drawBoard();
 	Hex getHex(int);
 	void setHex(Hex, int);
 
