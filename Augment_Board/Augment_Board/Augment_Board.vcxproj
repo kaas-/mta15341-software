@@ -17,6 +17,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Segment.cpp" />
+    <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
@@ -25,6 +26,7 @@
     <ClInclude Include="Hex.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Segment.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

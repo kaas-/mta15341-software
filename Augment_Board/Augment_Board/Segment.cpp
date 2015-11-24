@@ -1,6 +1,8 @@
 #include "opencv2/opencv.hpp"
 #include <array>
-#include "Segment.h""
+//#include <math.h>
+#include "Segment.h"
+#include "Stack.h"
 
 using namespace cv;
 using namespace std;
@@ -165,17 +167,18 @@ Mat Segment::medianFilter(Mat src, int radius)
 
 Mat Segment::erode(Mat src, int kernRad) {
 
-	Mat output;
+	Mat output = src.clone();
 	int Temp = 0;
+	int kernPixels = pow(kernRad * 2 + 1, 2);
 
 	//Quadra for loops that takes every single kernel, for every valid pixel
 	for (int y = 0 + kernRad; y < src.rows - kernRad; ++y)
 	{
 		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
 		{
-			for (int ky = y - kernRad; ky < y + kernRad; ++ky)
+			for (int ky = y - kernRad; ky <= y + kernRad; ++ky)
 			{
-				for (int kx = x - kernRad; kx < x + kernRad; ++kx)
+				for (int kx = x - kernRad; kx <= x + kernRad; ++kx)
 				{
 					if (src.at<uchar>(ky, kx) == 255) {
 						Temp++;
@@ -183,23 +186,23 @@ Mat Segment::erode(Mat src, int kernRad) {
 				}
 			}
 			//if all the pixels are value 255, give the output pixel greyscale value of 255
-			if (Temp == 9){
+			if (Temp == kernPixels){
 				output.at<uchar>(y, x) = 255;
 			}
 			//else, give it 0
 			else {
 				output.at<uchar>(y, x) = 0;
 			}
-
+			Temp = 0;
 		}
 	}
-
+	return output;
 }
 
 
 Mat Segment::dilate(Mat src, int kernRad) {
 
-	Mat output;
+	Mat output = src.clone();
 	int Temp = 0;
 
 	//Quadra for loops that takes every single kernel, for every valid pixel
@@ -207,9 +210,9 @@ Mat Segment::dilate(Mat src, int kernRad) {
 	{
 		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
 		{
-			for (int ky = y - kernRad; ky < y + kernRad; ++ky)
+			for (int ky = y - kernRad; ky <= y + kernRad; ++ky)
 			{
-				for (int kx = x - kernRad; kx < x + kernRad; ++kx)
+				for (int kx = x - kernRad; kx <= x + kernRad; ++kx)
 				{
 					if (src.at<uchar>(ky, kx) == 255) {
 						Temp++;
@@ -217,43 +220,271 @@ Mat Segment::dilate(Mat src, int kernRad) {
 				}
 			}
 			//if one of the pixels are value 255, give the output pixel greyscale value of 255
-			if (Temp >= 9){
+			if (Temp != 0){
 				output.at<uchar>(y, x) = 255;
 			}
 			//else, give it 0
 			else {
 				output.at<uchar>(y, x) = 0;
 			}
+			Temp = 0;
 
 		}
 	}
+	return output;
 }
 
-void Segment::burn(Mat src, int x, int y)
+list<Mat> Segment::burn(Mat src)
 {
-
-	if (src.at<uchar>(y, x) > 0 && src.at<uchar>(y, x) < 255)
+	list<Point> blobPoints;
+	list<Mat> blobs;
+	Mat newBlob;
+	int blobCount = 0;
+	int blobPointsMinX, blobPointsMinY, blobPointsMaxX, blobPointsMaxY;
+	for (int y = 0; y < src.rows; ++y)
 	{
-		return;
+		for (int x = 0; x < src.cols; ++x)
+		{
+			if (src.at<uchar>(y, x) == 255)
+			{
+				blobCount++;
+				blobPoints = grassFireImage(src, Point(x, y), blobCount);
+				blobPointsMinX = src.rows-1;
+				blobPointsMinY = src.cols-1;
+				blobPointsMaxX = 0;
+				blobPointsMaxY = 0;
+
+				
+				for (list<Point>::iterator i = blobPoints.begin(); i != blobPoints.end(); ++i)
+				{
+					if (i->x < blobPointsMinX)
+					{
+						blobPointsMinX = i->x;
+					}
+					if (i->x > blobPointsMaxX)
+					{
+						blobPointsMaxX = i->x;
+					}
+					if (i->y < blobPointsMinY)
+					{
+						blobPointsMinY = i->y;
+					}
+					if (i->y > blobPointsMaxY)
+					{
+						blobPointsMaxY = i->y;
+					}
+				}
+				
+				newBlob = Mat(blobPointsMaxY - blobPointsMinY+1, blobPointsMaxX - blobPointsMinX+1, CV_8U, Scalar(0));
+
+				
+				for (list<Point>::iterator i = blobPoints.begin(); i != blobPoints.end(); ++i)
+				{
+					try {
+						if (i->y - blobPointsMinY < 0 || i->x - blobPointsMinX < 0 || i->y - blobPointsMinY >= newBlob.rows || i->x - blobPointsMinX >= newBlob.cols)
+						{
+							continue;
+						}
+						Point newPixel = Point((i->x) - blobPointsMinX, (i->y) - blobPointsMinY);
+						newBlob.at<uchar>(newPixel.y, newPixel.x) = 255;
+
+					}
+					catch (Exception e)
+					{
+						blobPoints.clear();
+						break;
+					}
+					
+				}
+				blobs.push_front(newBlob);
+				blobPoints.clear();
+			}
+		}
 	}
+	cout << endl << "Blobs: " << blobCount << endl;
+	return blobs;
+}
 
-	if (src.at<uchar>(y, x) == 0)
+list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
+{
+	list<Point> points;
+	Stack pointStack;
+
+	Mat labels = src.clone();
+
+	pointStack.push(point);
+	src.at<uchar>(point) = 1;
+	int pops = 0;
+
+	bool done = false;
+	while (!done)
 	{
-		src.at<uchar>(y, x) = 10;
-		burn(src, x, y - 1);
-		burn(src, x - 1, y);
-		burn(src, x, y + 1);
-		burn(src, x + 1, y);
+		try {
+			if (src.at<uchar>(point.y - 1, point.x) == 255)
+			{
+				point = Point(point.x, point.y - 1);
+				src.at<uchar>(point.y, point.x) = 1;
+				pointStack.push(point);
+			}
+			else if (src.at<uchar>(point.y + 1, point.x) == 255)
+			{
+				point = Point(point.x, point.y + 1);
+				src.at<uchar>(point.y, point.x) = 1;
+				pointStack.push(point);
+			}
+			else if (src.at<uchar>(point.y, point.x - 1) == 255)
+			{
+				point = Point(point.x - 1, point.y);
+				src.at<uchar>(point.y, point.x) = 1;
+				pointStack.push(point);
+			}
+			else if (src.at<uchar>(point.y, point.x + 1) == 255)
+			{
+				//cout << "!Pixel before: " << (int)src.at<uchar>(point.y, point.x + 1) << " at " << point.x << ", " << point.y << endl;
+				point = Point(point.x + 1, point.y);
+
+				src.at<uchar>(point.y, point.x) = 1;
+				//cout << "!Pixel: " << (int)src.at<uchar>(point.y, point.x) << endl;
+				pointStack.push(point);
+			}
+			else
+			{
+				//cout << "Pixel before: " << (int)src.at<uchar>(point.y, point.x) << " at " << point.x << ", " << point.y << endl;
+				src.at<uchar>(point.y, point.x) = 0;
+				//cout << "Pixel: " << (int)src.at<uchar>(point.y, point.x) << endl;
+
+				//cout << pointStack.getTop()->point << endl;
+				points.push_front(pointStack.pop());
+				pops++;
+				//cout << pointStack.getTop()->point << endl;
+				//cout << pops << " pops, " << pointStack.getCount() << " elements" << endl;
+
+				/*if (pops % 1000 == 0)
+				{
+					imshow("image", src);
+					waitKey(0);
+				}*/
+
+				if (pointStack.getTop() != NULL)
+				{
+					point = pointStack.getTop()->point;
+				}
+				else
+				{
+					done = true;
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			cout << "EXCEPTION: " << e.msg << endl;
+			point = pointStack.pop();
+			pops++;
+			//waitKey(0);
+		}
+		
+
+	} 
+	
+	/*if (x < 0 || x >= src.cols || y < 0 || y >= src.rows)
+	{
+		points.clear();
+		return points;
 	}
 
 	if (src.at<uchar>(y, x) == 255)
 	{
-		grassFire(src, y, x);
-	}
+		if (init)
+		{
+			blobCount++;
+		}
+		try {
+			src.at<uchar>(y, x) = 255 - blobCount;
+			points.push_front({ y, x });
+		}
+		catch (Exception e)
+		{
+			cout << e.msg;
+			return points;
+		}
+		
+		try {
+			points.splice(points.end(), grassFireImage(src, x - 1, y, blobCount, false, iterator));
+			points.splice(points.end(), grassFireImage(src, x + 1, y, blobCount, false, iterator));
+			points.splice(points.end(), grassFireImage(src, x, y - 1, blobCount, false, iterator));
+			points.splice(points.end(), grassFireImage(src, x, y + 1, blobCount, false, iterator));
 
+		}
+		catch (Exception e)
+		{
+			return points;
+		}
+	}*/
+//	bool done = false;
+//	blobCount++;
+
+	/*while (!done)
+	{
+		cout << iterator++ << endl;
+		try {
+			src.at<uchar>(y, x) = 255 - blobCount;
+			points.push_front({ y, x });
+		}
+		catch (Exception e)
+		{
+			cout << e.msg;
+			return points;
+		}
+
+		if (src.at<uchar>(y - 1, x) == 255 && y >= 0)
+		{
+			y = y - 1;
+			continue;
+		}
+		else if (src.at<uchar>(y + 1, x) == 255 && y < src.rows)
+		{
+			y += 1;
+			continue;
+		}
+		else if (src.at<uchar>(y, x - 1) == 255 && x >= 0)
+		{
+			x = x - 1;
+			continue;
+		}
+		else if (src.at<uchar>(y, x + 1) == 255 && x < src.cols)
+		{
+			x += 1;
+			continue;
+		}
+		else
+		{
+			done = true;
+		}
+	}*/
+
+
+
+	return points;
 }
 
-Mat grassFire(Mat src, int x, int y)
+Mat Segment::normalizeImage(Mat src, double newMax, double newMin)
 {
-	return src;
+	double min, max;
+
+	//Find the maximum and minimum values of the input image
+	minMaxLoc(src, &min, &max);
+
+	//Make a clone of the image
+	Mat output = src.clone();
+
+	for (int y = 0; y < src.rows; ++y)
+	{
+		for (int x = 0; x < src.cols; ++x)
+		{
+			//Apply the normalization equation to each pixel.
+			output.at<uchar>(y, x) = floor((src.at<uchar>(y, x) - min) * (newMax - newMin) / (max - min) + newMin);
+
+		}
+	}
+	return output;
 }
