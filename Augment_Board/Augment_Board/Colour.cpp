@@ -12,7 +12,7 @@ Colour::~Colour()
 {
 }
 
-void Colour::filterColour()
+void Colour::filterColour(Tile::Type colourType)
 {
 	const cv::Scalar black = cv::Scalar(0, 0, 0);
 	const cv::Scalar red = cv::Scalar(0, 0, 255);

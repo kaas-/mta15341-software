@@ -6,8 +6,16 @@
 using namespace std;
 using namespace cv;
 
-Hex::Hex(/*Tile::Type t*/)
+Hex::Hex()
 	:TileType()
+{
+
+}
+
+
+
+Hex::Hex(Tile::Type t)
+	:TileType(t)
 {
 	
 }
@@ -33,7 +41,7 @@ Tile::Type Hex::getTileType()
 }
 
 //here we get a tile type from the tile.h and return a string with its name
-const char* Hex::getTileName()
+/*const char* Hex::getTileName()
 {
 	switch (TileType)
 	{
@@ -65,50 +73,15 @@ const char* Hex::getTileName()
 		return "Doesn't have a type";
 		break;
 	}
-}
+}*/
 
 //the tile type we just got is then assigned to a hex object
 void Hex::setTileType(Tile::Type t)
 {
 	TileType = t;
-	filterColour();
+	Colour::filterColour(TileType);
 }
 
-//this takes the type of the hex, and assigns it a corresponding colour, just like in player.cpp
-void Hex::filterColour()
-{
-	/*Colours hello;
-	switch (TileType)
-	{
-	case Tile::Type::BADLANDS:
-		setColour(Colours::red);
-		break;
-	case Tile::Type::LAKES:
-		colour = Colours::blue; //BLUE
-		break;
-	case Tile::Type::PLAINS:
-		colour = Colours::brown; //BROWN
-		break;
-	case Tile::Type::DESERT:
-		colour = Colours::yellow; //YELLOW
-		break;
-	case Tile::Type::FOREST:
-		colour = Colours::green; //GREEN
-		break;
-	case Tile::Type::SWAMPS:
-		colour = Colours::black; //BLACK LIKE MY SOUL
-		break;
-	case Tile::Type::MOUNTAINS:
-		colour = hello.gray; //GRAY
-		break;
-	case Tile::Type::RIVER:
-		colour = Colours::teal; //TEAL
-		break;
-	default:
-		colour = Colours::white; //WHITE
-		break;
-	}*/
-}
 
 //This draws the actual hex
 void Hex::drawHex(int x, int y, float h, Mat image, Tile::Type tiletype){
@@ -122,7 +95,7 @@ void Hex::drawHex(int x, int y, float h, Mat image, Tile::Type tiletype){
 		Point f(x- h, y + (0.5*r));
 		Point points[6] = { a, b, c, d, e, f };
 
-		fillConvexPoly(image, points, 6, colour, LINE_8,0);
+		fillConvexPoly(image, points, 6, tiletype, LINE_8,0);
 	}
 
 

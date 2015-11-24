@@ -18,7 +18,8 @@ private:
 	cv::Scalar colour;
 
 public:
-	Hex(/*Tile::Type TileType*/);
+	Hex();
+	Hex(Tile::Type TileType);
 	~Hex();
 
 	cv::Scalar getColour();
@@ -26,7 +27,6 @@ public:
 	Tile::Type getTileType();
 	void setTileType(Tile::Type);
 	const char* getTileName();
-	void filterColour();
 	void drawHex(int x, int y, float h, Mat image, Tile::Type tiletype);
 };
 
