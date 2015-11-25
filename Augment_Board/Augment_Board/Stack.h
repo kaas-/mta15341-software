@@ -1,5 +1,5 @@
 #ifndef STACK_H
-#define STACK H
+#define STACK_H
 #include "opencv2/opencv.hpp"
 
 /*

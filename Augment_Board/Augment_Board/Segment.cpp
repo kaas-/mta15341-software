@@ -352,13 +352,13 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 
 				points.push_front(pointStack.pop()); //put it into the list of points to be returned by the function and pop it from the Stack.
 
-				if (pointStack.getTop() != NULL) //after the pop, if the then-top Node is NOT NULL, set the next Node's Point to be the current pixel.
+				if (pointStack.getTop() != nullptr) //after the pop, if the then-top Node is NOT nullptr, set the next Node's Point to be the current pixel.
 				{
 					point = pointStack.getTop()->point;
 				}
 				else
 				{
-					done = true; //if NULL, we're done, and end the loop
+					done = true; //if nullptr, we're done, and end the loop
 				}
 			}
 		}

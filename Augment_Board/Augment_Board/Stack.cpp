@@ -6,7 +6,7 @@ using namespace cv;
 using namespace std;
 
 
-Stack::Stack() : top(NULL), count(0) {} 
+Stack::Stack() : top(nullptr), count(0) {} 
 
 void Stack::push(Point point) //Insert new Node to the beginning of the list.
 {
@@ -18,10 +18,10 @@ void Stack::push(Point point) //Insert new Node to the beginning of the list.
 }
 
 Point Stack::pop() { //Deletes the topmost Node and returns its data.
-	if (top == NULL)
+	if (top == nullptr)
 	{
 		cout << "Stack empty" << endl; //If pop() is called with no data in the list.
-		return NULL;
+		return 0;
 	}
 	else
 	{
@@ -41,12 +41,12 @@ Stack::~Stack()
 {
 	Node* current = top; //Conductor used to go through the list.
 
-	while (current != NULL) //Go through the list until next points to NULL
+	while (current != nullptr) //Go through the list until next points to NULL
 	{
 		Node* next = current->next; //Prepare to go the next Node in the list
 		delete(current);
  		current = next; //Go to the next Node.
 	}
 
-	top = NULL;
+	top = nullptr;
 }
