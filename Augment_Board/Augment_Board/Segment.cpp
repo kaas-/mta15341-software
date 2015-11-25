@@ -236,56 +236,56 @@ Mat Segment::dilate(Mat src, int kernRad) {
 
 list<Mat> Segment::burn(Mat src)
 {
-	list<Point> blobPoints;
-	list<Mat> blobs;
+	list<Point> blobPoints; //list of Points to construct an image from
+	list<Mat> blobs; //list of all blobs identified by the grassFireImage()
 	Mat newBlob;
 	int blobCount = 0;
 	int blobPointsMinX, blobPointsMinY, blobPointsMaxX, blobPointsMaxY;
-	for (int y = 0; y < src.rows; ++y)
+	for (int y = 0; y < src.rows; ++y) //Go through each pixel in the image
 	{
 		for (int x = 0; x < src.cols; ++x)
 		{
-			if (src.at<uchar>(y, x) == 255)
+			if (src.at<uchar>(y, x) == 255) //If pixel is white, we have reached a new blob
 			{
-				blobCount++;
-				blobPoints = grassFireImage(src, Point(x, y), blobCount);
-				blobPointsMinX = src.rows-1;
-				blobPointsMinY = src.cols-1;
+				blobCount++; 
+				blobPoints = grassFireImage(src, Point(x, y), blobCount); //call the grassFireImage(). GrassFireImage() returns a list of Points.
+				blobPointsMinY = src.rows-1; //These four variables are set for the purpose of the if-statements within the image construction algorithm.
+				blobPointsMinX = src.cols-1;
 				blobPointsMaxX = 0;
 				blobPointsMaxY = 0;
 
-				
-				for (list<Point>::iterator i = blobPoints.begin(); i != blobPoints.end(); ++i)
+				//List iterator. i is a pointer, as well as an iterator. ++i makes it point to the next element in the list.
+				//i->VARIABLE and i->METHOD() to call variables and methods of the current element.
+				for (list<Point>::iterator i = blobPoints.begin(); i != blobPoints.end(); ++i) //Go through each element in the list.
 				{
 					if (i->x < blobPointsMinX)
 					{
-						blobPointsMinX = i->x;
+						blobPointsMinX = i->x; //Find the minimum x-value in the list
 					}
 					if (i->x > blobPointsMaxX)
 					{
-						blobPointsMaxX = i->x;
+						blobPointsMaxX = i->x; //Maximum x-value
 					}
 					if (i->y < blobPointsMinY)
 					{
-						blobPointsMinY = i->y;
+						blobPointsMinY = i->y; //Minimum y-value
 					}
 					if (i->y > blobPointsMaxY)
 					{
-						blobPointsMaxY = i->y;
+						blobPointsMaxY = i->y; //Maximum y-value
 					}
 				}
 				
-				newBlob = Mat(blobPointsMaxY - blobPointsMinY+1, blobPointsMaxX - blobPointsMinX+1, CV_8U, Scalar(0));
+				newBlob = Mat(blobPointsMaxY - blobPointsMinY+1, blobPointsMaxX - blobPointsMinX+1, CV_8U, Scalar(0)); //Width and height are defined as the difference between minimum and maximum x- and y-values
 
-				
 				for (list<Point>::iterator i = blobPoints.begin(); i != blobPoints.end(); ++i)
 				{
 					try {
-						if (i->y - blobPointsMinY < 0 || i->x - blobPointsMinX < 0 || i->y - blobPointsMinY >= newBlob.rows || i->x - blobPointsMinX >= newBlob.cols)
+						if (i->y - blobPointsMinY < 0 || i->x - blobPointsMinX < 0 || i->y - blobPointsMinY >= newBlob.rows || i->x - blobPointsMinX >= newBlob.cols) //just a safety measure and lefover debug code
 						{
-							continue;
+							continue; 
 						}
-						Point newPixel = Point((i->x) - blobPointsMinX, (i->y) - blobPointsMinY);
+						Point newPixel = Point((i->x) - blobPointsMinX, (i->y) - blobPointsMinY); //Put each Point from the Point list into the appropriate position in the image.
 						newBlob.at<uchar>(newPixel.y, newPixel.x) = 255;
 
 					}
@@ -296,8 +296,8 @@ list<Mat> Segment::burn(Mat src)
 					}
 					
 				}
-				blobs.push_front(newBlob);
-				blobPoints.clear();
+				blobs.push_front(newBlob); //Push the newly constructed image to the top of the list of images.
+				blobPoints.clear(); //Clear the list of Points for the next blob.
 			}
 		}
 	}
@@ -310,22 +310,24 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 	list<Point> points;
 	Stack pointStack;
 
-	Mat labels = src.clone();
-
-	pointStack.push(point);
-	src.at<uchar>(point) = 1;
+	pointStack.push(point); //Push the first point to the Stack
+	src.at<uchar>(point) = 1; 
 
 	bool done = false;
 	while (!done)
 	{
-		try {
-			if (src.at<uchar>(point.y - 1, point.x) == 255)
+		try { //Check each pixel adjacent to the current pixel
+			//The first adjacent pixel which is white is added to the Stack and set to be the current pixel.
+			//Notice the "else if" - it starts over as soon as it finds a white pixel.
+			//The Point will stay in the stack until all pixel have been checked.
+			//Then, if no white adjacent pixel is left, it is added to the list of pixels to be returned, and the Node is popped.
+			if (src.at<uchar>(point.y - 1, point.x) == 255) //if adjacent pixel is white 
 			{
-				point = Point(point.x, point.y - 1);
+				point = Point(point.x, point.y - 1);  //set adjacent pixel to be the current pixel
 				src.at<uchar>(point.y, point.x) = 1;
-				pointStack.push(point);
+				pointStack.push(point); //and put it into the stack
 			}
-			else if (src.at<uchar>(point.y + 1, point.x) == 255)
+			else if (src.at<uchar>(point.y + 1, point.x) == 255) //same for each adjacent pixel
 			{
 				point = Point(point.x, point.y + 1);
 				src.at<uchar>(point.y, point.x) = 1;
@@ -346,17 +348,17 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 			}
 			else
 			{
-				src.at<uchar>(point.y, point.x) = 0;
+				src.at<uchar>(point.y, point.x) = 0; //all adjacent pixels have been set, so the pixel can be turned black
 
-				points.push_front(pointStack.pop());
+				points.push_front(pointStack.pop()); //put it into the list of points to be returned by the function and pop it from the Stack.
 
-				if (pointStack.getTop() != NULL)
+				if (pointStack.getTop() != NULL) //after the pop, if the then-top Node is NOT NULL, set the next Node's Point to be the current pixel.
 				{
 					point = pointStack.getTop()->point;
 				}
 				else
 				{
-					done = true;
+					done = true; //if NULL, we're done, and end the loop
 				}
 			}
 		}
