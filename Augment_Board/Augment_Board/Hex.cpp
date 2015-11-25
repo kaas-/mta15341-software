@@ -1,5 +1,4 @@
 #include "Hex.h"
-#include "Colour.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp" 
 #include "opencv2/highgui/highgui.hpp"
@@ -7,15 +6,15 @@ using namespace std;
 using namespace cv;
 
 Hex::Hex()
-	:TileType()
+	:colourType()
 {
 
 }
 
 
 
-Hex::Hex(Tile::Type t)
-	:TileType(t)
+Hex::Hex(Scalar t)
+	:colourType(t)
 {
 	
 }
@@ -24,21 +23,21 @@ Hex::Hex(Tile::Type t)
 Hex::~Hex()
 {
 }
-
+/*
 cv::Scalar Hex::getColour()
 {
-	return colour;
+	return colourType;
 }
 
 void Hex::setColour(cv::Scalar c)
 {
-	colour = c;
+	colourType = c;
 }
 
-Tile::Type Hex::getTileType()
+Scalar Hex::getTileType()
 {
-	return TileType;
-}
+	return colourType;
+}*/
 
 //here we get a tile type from the tile.h and return a string with its name
 /*const char* Hex::getTileName()
@@ -76,15 +75,15 @@ Tile::Type Hex::getTileType()
 }*/
 
 //the tile type we just got is then assigned to a hex object
-void Hex::setTileType(Tile::Type t)
+/*void Hex::setTileType(Scalar t)
 {
-	TileType = t;
-	Colour::filterColour(TileType);
-}
+	colourType = t;
+	Colour::filterColour(colourType);
+}*/
 
 
 //This draws the actual hex
-void Hex::drawHex(int x, int y, float h, Mat image, Tile::Type tiletype){
+void Hex::drawHex(int x, int y, float h, Mat image, Scalar colour ){
 	float r = (2.0 / 3.0) * (sqrt(3.0) * h);
 	
 		Point a(x, y);
@@ -95,7 +94,7 @@ void Hex::drawHex(int x, int y, float h, Mat image, Tile::Type tiletype){
 		Point f(x- h, y + (0.5*r));
 		Point points[6] = { a, b, c, d, e, f };
 
-		fillConvexPoly(image, points, 6, tiletype, LINE_8,0);
+		fillConvexPoly(image, points, 6, colour, LINE_8,0);
 	}
 
 

@@ -11,7 +11,7 @@ using namespace cv;
 class Board
 {
 private:
-	Hex* hex;
+	Colour hex;
 	Gesture terraform;
 
 public:

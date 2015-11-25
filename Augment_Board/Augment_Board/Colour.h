@@ -3,29 +3,33 @@
 #define COLOUR_H
 
 #include <opencv/cv.h>
-#include "Tile.h"
+//#include "Tile.h"
 
 class Colour
 {
 private:
-	cv::Scalar colour;
-	Tile::Type colourType;
+	Scalar colourType;
 	
-	const cv::Scalar black ;
-	const cv::Scalar red;
-	const cv::Scalar blue ;
-	const cv::Scalar green ;
-	const cv::Scalar yellow ;
-	const cv::Scalar brown ;
-	const cv::Scalar gray ;
-	const cv::Scalar teal ;
-	const cv::Scalar white;
+	
+	const Scalar SWAMP;
+	const Scalar BADLANDS;
+	const Scalar LAKE ;
+	const Scalar FOREST ;
+	const Scalar DESERT ;
+	const Scalar PLAINS ;
+	const Scalar MOUNTAIN ;
+	const Scalar RIVER ;
+	const Scalar DEFAULT;
 
 public:
-	Colour(Tile::Type colourType, cv::Scalar colour);
+	Colour();
+	Colour(Scalar colourType);
 	~Colour();
-
-	static void filterColour(Tile::Type);
+	
+	Scalar getColourType(String);
+	void setColourType(Scalar );
+	static void filterColour(Scalar);
+	
 
 
 	
