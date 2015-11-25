@@ -58,7 +58,7 @@ int main(int, char)
 	return 0;*/
 	//runWebcam();
 
-	//board.buildBoard();
+	board.buildBoard();
 	board.drawBoard();
 
 	cin.get();

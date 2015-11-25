@@ -28,8 +28,7 @@ void Board::buildBoard()
 	Colour hexArray[112];
 	Colour p;
 	p.getColourType("PLAINS"); 
-	p.setColourType(); 
-
+	
 
 	//plain tiles
 	hexArray[0].setColourType(Colour::PLAINS);
@@ -187,7 +186,9 @@ void Board::buildBoard()
 		
 		//currently defining ALL hexes as RIVER tiles. not finale.
 		//hex[i].setColourType(Tile::Type::RIVER);
-
+//The function that actually draws the board. This needs an´image to print on, some x,y coordinates for the top of the hexes 
+//and then it needs an h input which is the distance from the center of the hex to a flat side.
+//This function draws nine lines of hexes via for loops that changes the x coodinate every time it runs.
 void Board::drawBoard(){
 	Mat image;
 	Hex hello;
@@ -205,7 +206,7 @@ void Board::drawBoard(){
 	//En optimal løsning ville være at have ét x-koordinat som den så ville kunne tegne hele boardet ud fra. 
 	int y = 100;
 	int h = 13;
-	float r = (2.0 / 3.0) * (sqrt(3.0) * h);
+	
 	for (int i = 0; i < 12; i++){
 		x1 += 2 * 13;
 		anchors[i] = x1;
