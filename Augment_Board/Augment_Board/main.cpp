@@ -56,10 +56,10 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-	runWebcam();
+	//runWebcam();
 
 	//board.buildBoard();
-	//board.drawBoard();
+	board.drawBoard();
 
 	cin.get();
 	cin.get();
