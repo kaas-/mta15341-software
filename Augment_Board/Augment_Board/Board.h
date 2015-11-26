@@ -21,8 +21,8 @@ public:
 
 	void buildBoard();
 	void drawBoard();
-	Hex getHex(int);
-	void setHex(Hex, int);
+	Hex getHex(int i) { return hexArray[i]; };
+	//void setHex(Hex h, int i) { hexArray[i] = h };
 
 };
 
