@@ -4,6 +4,7 @@
 #include <array>
 #include "opencv2/opencv.hpp"
 #include <list>
+#include "Blob.h"
 
 namespace Segment {
 	
@@ -15,7 +16,7 @@ namespace Segment {
 	cv::Mat medianFilter(cv::Mat src, int radius);
 	cv::Mat dilate(cv::Mat src, int radius);
 	cv::Mat erode(cv::Mat src, int radius);
-	std::list<cv::Mat> burn(cv::Mat src);
+	std::list<Blob> burn(cv::Mat src);
 	std::list<cv::Point> grassFireImage(cv::Mat src, cv::Point point, int blobCount);
 	cv::Mat normalizeImage(cv::Mat src, double newMax, double newMin);
 }

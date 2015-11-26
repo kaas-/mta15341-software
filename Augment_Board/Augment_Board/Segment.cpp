@@ -3,6 +3,7 @@
 //#include <math.h>
 #include "Segment.h"
 #include "Stack.h"
+#include "Blob.h"
 
 using namespace cv;
 using namespace std;
@@ -234,11 +235,12 @@ Mat Segment::dilate(Mat src, int kernRad) {
 	return output;
 }
 
-list<Mat> Segment::burn(Mat src)
+list<Blob> Segment::burn(Mat src)
 {
 	list<Point> blobPoints; //list of Points to construct an image from
-	list<Mat> blobs; //list of all blobs identified by the grassFireImage()
-	Mat newBlob;
+	list<Blob> blobs; //list of all blobs identified by the grassFireImage()
+	Mat newBlobImage;
+	Blob newBlob;
 	int blobCount = 0;
 	int blobPointsMinX, blobPointsMinY, blobPointsMaxX, blobPointsMaxY;
 	for (int y = 0; y < src.rows; ++y) //Go through each pixel in the image
@@ -276,17 +278,17 @@ list<Mat> Segment::burn(Mat src)
 					}
 				}
 				
-				newBlob = Mat(blobPointsMaxY - blobPointsMinY+1, blobPointsMaxX - blobPointsMinX+1, CV_8U, Scalar(0)); //Width and height are defined as the difference between minimum and maximum x- and y-values
+				newBlobImage = Mat(blobPointsMaxY - blobPointsMinY+1, blobPointsMaxX - blobPointsMinX+1, CV_8U, Scalar(0)); //Width and height are defined as the difference between minimum and maximum x- and y-values
 
 				for (list<Point>::iterator i = blobPoints.begin(); i != blobPoints.end(); ++i)
 				{
 					try {
-						if (i->y - blobPointsMinY < 0 || i->x - blobPointsMinX < 0 || i->y - blobPointsMinY >= newBlob.rows || i->x - blobPointsMinX >= newBlob.cols) //just a safety measure and lefover debug code
+						if (i->y - blobPointsMinY < 0 || i->x - blobPointsMinX < 0 || i->y - blobPointsMinY >= newBlobImage.rows || i->x - blobPointsMinX >= newBlobImage.cols) //just a safety measure and lefover debug code
 						{
 							continue; 
 						}
 						Point newPixel = Point((i->x) - blobPointsMinX, (i->y) - blobPointsMinY); //Put each Point from the Point list into the appropriate position in the image.
-						newBlob.at<uchar>(newPixel.y, newPixel.x) = 255;
+						newBlobImage.at<uchar>(newPixel.y, newPixel.x) = 255;
 
 					}
 					catch (Exception e)
@@ -296,6 +298,8 @@ list<Mat> Segment::burn(Mat src)
 					}
 					
 				}
+				newBlob = Blob(newBlobImage, blobPointsMinX, blobPointsMaxX, blobPointsMinY, blobPointsMaxY);
+
 				blobs.push_front(newBlob); //Push the newly constructed image to the top of the list of images.
 				blobPoints.clear(); //Clear the list of Points for the next blob.
 			}
