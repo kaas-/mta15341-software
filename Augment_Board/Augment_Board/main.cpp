@@ -11,11 +11,12 @@ using namespace Segment;
 Mat image;
 int dilation_size = 3;
 Gesture gesture(image, image);
+Scalar hexArray;
 Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
-Board board(gesture);
+Board board(gesture, hexArray);
 
 Hex findCurrentHex(Board currentBoard);
 

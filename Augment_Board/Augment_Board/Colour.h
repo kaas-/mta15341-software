@@ -8,28 +8,28 @@
 class Colour
 {
 private:
-	const Scalar colourType;
+	const cv::Scalar colourType;
 	
 	
 	
 public:
 	Colour();
-	Colour(const Scalar colourType);
+	Colour(const cv::Scalar colourType);
 	~Colour();
 	
-	Scalar getColourType(String);
-	void setColourType(Scalar );
-	static void filterColour(Scalar);
+	/*Scalar getColourType(String);
+	void setColourType(Scalar );*/
+//	static void filterColour(Scalar);
 	
-	static const Scalar SWAMP;
-	static const Scalar BADLANDS;
-	static const Scalar LAKE;
-	static const Scalar FOREST;
-	static const Scalar DESERT;
-	static const Scalar PLAINS;
-	static const Scalar MOUNTAIN;
-	static const Scalar RIVER;
-	static const Scalar DEFAULT;
+	static const cv::Scalar SWAMP;
+	static const cv::Scalar BADLANDS;
+	static const cv::Scalar LAKE;
+	static const cv::Scalar FOREST;
+	static const cv::Scalar DESERT;
+	static const cv::Scalar PLAINS;
+	static const cv::Scalar MOUNTAIN;
+	static const cv::Scalar RIVER;
+	static const cv::Scalar DEFAULT;
 
 
 	

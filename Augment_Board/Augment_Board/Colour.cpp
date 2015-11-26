@@ -18,16 +18,16 @@ Colour::~Colour()
 }
 
 
-static const Scalar SWAMP = Scalar(0, 0, 0);
-static const Scalar BADLANDS = Scalar(0, 0, 255);
-static const Scalar LAKE = Scalar(255, 102, 0);
-static const Scalar FOREST = Scalar(0, 204, 0);
-static const Scalar DESERT = Scalar(0, 255, 255);
-static const Scalar PLAINS = Scalar(48, 82, 122);
-static const Scalar MOUNTAIN = Scalar(179, 179, 179);
-static const Scalar RIVER = Scalar(166, 166, 76);
-static const Scalar DEFAULT = Scalar(255, 255, 255);
-
+const Scalar Colour::SWAMP = Scalar(0, 0, 0);
+const Scalar Colour::BADLANDS = Scalar(0, 0, 255);
+const Scalar Colour::LAKE = Scalar(255, 102, 0);
+const Scalar Colour::FOREST = Scalar(0, 204, 0);
+const Scalar Colour::DESERT = Scalar(0, 255, 255);
+const Scalar Colour::PLAINS = Scalar(48, 82, 122);
+const Scalar Colour::MOUNTAIN = Scalar(179, 179, 179);
+const Scalar Colour::RIVER = Scalar(255, 255, 0);
+const Scalar Colour::DEFAULT = Scalar(255, 255, 255);
+/*
 Scalar Colour::getColourType(String string){
 	if (string == "SWAMP"){
 		colourType = Colour::SWAMP;
@@ -69,7 +69,7 @@ Scalar Colour::getColourType(String string){
 void Colour::setColourType(Scalar c ){
 	colourType = c;
 	
-}
+}*/
 
 
 /*void Colour::setColourType(Scalar c){
