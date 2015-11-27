@@ -4,6 +4,12 @@
 #include "Segment.h"
 #include <vector>
 
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+
 using namespace cv;
 using namespace std;
 using namespace Segment;
@@ -14,6 +20,15 @@ Gesture gesture(image, image);
 Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
+
+Mat src; Mat src_gray;
+int thresh = 100;
+int max_thresh = 255;
+RNG rng(12345);
+
+int convexHullFunction();
+
+void thresh_callback(int, void*);
 
 Board board(gesture);
 
@@ -56,7 +71,8 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-	runWebcam();
+
+	convexHullFunction();
 
 	//board.buildBoard();
 	//board.drawBoard();
@@ -64,6 +80,36 @@ int main(int, char)
 	cin.get();
 	cin.get();
 	return 0;
+}
+
+int convexHullFunction()
+{
+	/// Load source image and convert it to gray
+	VideoCapture cap(0); // open the default camera
+	if (!cap.isOpened()) // check if we succeeded
+		return -1;
+
+	for (;;)
+	{
+		cap >> src;
+		/// Convert image to gray and blur it
+		cvtColor(src, src_gray, CV_BGR2GRAY);
+		blur(src_gray, src_gray, Size(3, 3));
+
+		/// Create Window
+		char* source_window = "Source";
+		namedWindow(source_window, CV_WINDOW_AUTOSIZE);
+		imshow(source_window, src);
+
+		createTrackbar(" Threshold:", "Source", &thresh, max_thresh, thresh_callback);
+		thresh_callback(0, 0);
+
+		cout << thresh;
+
+		if (waitKey(30) >= 0)
+			break;
+	}
+	return(0);
 }
 
 int runWebcam()
@@ -140,6 +186,7 @@ void changeCurrentColour(Hex hex, Player player)
 
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration)
 {
+	Mat frame;
 	cap >> firstFrame;
 	nextFrame = firstFrame.clone();
 	weightedFrame = firstFrame.clone();
@@ -147,12 +194,47 @@ Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weigh
 	cap.retrieve(nextFrame);
 	cvtColor(firstFrame, firstFrame, CV_BGR2GRAY);
 	cvtColor(nextFrame, nextFrame, CV_BGR2GRAY);
-	addWeighted(firstFrame, 0.5, nextFrame, 0.5, 0.0, weightedFrame);
+	addWeighted(firstFrame, 0.95, nextFrame, 0.05, 0.0, weightedFrame);
 
 	for (int i = 0; i < duration; i++)
 	{
-		getWeightedFrames(cap, firstFrame, weightedFrame, weightedFrame, duration);
+		cap >> frame;
+		addWeighted(weightedFrame, 0.95, frame, 0.05, 0.0, weightedFrame);
 		cout << "Weighing frames...";
 	}
 	return weightedFrame;
+}
+
+void thresh_callback(int, void*)
+{
+	Mat src_copy = src.clone();
+	Mat threshold_output;
+	vector<vector<Point> > contours;
+	vector<Vec4i> hierarchy;
+
+	/// Detect edges using Threshold
+	threshold(src_gray, threshold_output, thresh, 255, THRESH_BINARY);
+
+	/// Find contours
+	findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+	/// Find the convex hull object for each contour
+	vector<vector<Point> >hull(contours.size());
+	for (int i = 0; i < contours.size(); i++)
+	{
+		convexHull(Mat(contours[i]), hull[i], false);
+	}
+
+	/// Draw contours + hull results
+	Mat drawing = Mat::zeros(threshold_output.size(), CV_8UC3);
+	for (int i = 0; i< contours.size(); i++)
+	{
+		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+		drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawing, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+	}
+
+	/// Show in a window
+	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
+	imshow("Hull demo", drawing);
 }
