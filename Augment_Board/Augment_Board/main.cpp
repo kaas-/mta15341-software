@@ -22,7 +22,7 @@ Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
-<<<<<<< HEAD
+
 Mat src; Mat src_gray;
 int thresh = 100;
 int max_thresh = 255;
@@ -33,9 +33,8 @@ int convexHullFunction();
 void thresh_callback(int, void*);
 
 Board board(gesture);
-=======
-Board board(gesture, hexArray);
->>>>>>> 84efa5500d80001b82eeaba0c5724693c0234c7f
+
+//Board board(gesture, hexArray);
 
 Hex findCurrentHex(Board currentBoard);
 
@@ -76,12 +75,11 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-<<<<<<< HEAD
 
 	convexHullFunction();
-=======
+
 	//runWebcam();
->>>>>>> 84efa5500d80001b82eeaba0c5724693c0234c7f
+
 
 	board.buildBoard();
 	board.drawBoard();
