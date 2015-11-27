@@ -101,6 +101,7 @@ int Segment::getBestOtsuScore(array<int, 256> histogram)
 
 Mat Segment::thresholdImg(Mat src, int threshold)
 {
+	//for each pixel
 	for (int y = 0; y < src.rows; ++y)
 	{
 		for (int x = 0; x < src.cols; ++x)
@@ -124,6 +125,7 @@ array<int, 256> Segment::getHistogram(Mat src)
 	array<int, 256> histogram;
 	histogram.fill(0);
 
+	//for each pixel
 	for (int y = 0; y < src.rows; ++y)
 	{
 		for (int x = 0; x < src.cols; ++x)
@@ -138,7 +140,8 @@ array<int, 256> Segment::getHistogram(Mat src)
 
 Mat Segment::rgb2gray(Mat src)
 {
-	Mat output(src.size(), CV_8U, Scalar(0));
+	//Create a Mat object with the same size as src, 1 channel (greyscale) 8 bits, all black pixels.
+	Mat output = Mat(src.size(), CV_8U, Scalar(0));
 
 	for (int y = 0; y < src.rows; ++y)
 	{
@@ -170,9 +173,11 @@ Mat Segment::erode(Mat src, int kernRad) {
 
 	Mat output = src.clone();
 	int Temp = 0;
+
+	//Math: kernPixels = (kernRad * 2 + 1)^2
 	int kernPixels = pow(kernRad * 2 + 1, 2);
 
-	//Quadra for loops that takes every single kernel, for every valid pixel
+	//Quadra for loops that takes every single kernel element, for every valid pixel
 	for (int y = 0 + kernRad; y < src.rows - kernRad; ++y)
 	{
 		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
@@ -206,7 +211,7 @@ Mat Segment::dilate(Mat src, int kernRad) {
 	Mat output = src.clone();
 	int Temp = 0;
 
-	//Quadra for loops that takes every single kernel, for every valid pixel
+	//Quadra for loops that takes every single kernel element, for every valid pixel
 	for (int y = 0 + kernRad; y < src.rows - kernRad; ++y)
 	{
 		for (int x = 0 + kernRad; x < src.cols - kernRad; ++x)
