@@ -2,7 +2,8 @@
 #ifndef HEX_H
 #define HEX_H
 
-#include "Tile.h"
+
+#include "Colour.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp" 
 #include "opencv2/highgui/highgui.hpp"
@@ -14,20 +15,20 @@ using namespace cv;
 class Hex
 {
 private:
-	Tile::Type TileType;
-	cv::Scalar colour;
+	//Tile::Type TileType;
+	Scalar colourType;
 
 public:
 	Hex();
-	Hex(Tile::Type TileType);
+	Hex(Scalar colourType);
 	~Hex();
 
-	cv::Scalar getColour();
-	void setColour(cv::Scalar colour);
-	Tile::Type getTileType();
-	void setTileType(Tile::Type);
+	/*Scalar getColour();
+	void setColour(Scalar colour);
+	Scalar getTileType();
+	void setTileType(Scalar);*/
 	const char* getTileName();
-	void drawHex(int x, int y, float h, Mat image, Tile::Type tiletype);
+	void drawHex(int x, int y, float h, Mat image, Scalar colour);
 };
 
 #endif

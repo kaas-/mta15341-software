@@ -11,11 +11,12 @@ using namespace cv;
 class Board
 {
 private:
-	Hex* hex;
+	Hex hex;
 	Gesture terraform;
+	Scalar hexArray[];
 
 public:
-	Board(Gesture terraform);
+	Board(Gesture terraform, Scalar hexArray);
 	~Board();
 
 	void buildBoard();
