@@ -330,6 +330,9 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 			//Notice the "else if" - it starts over as soon as it finds a white pixel.
 			//The Point will stay in the stack until all pixel have been checked.
 			//Then, if no white adjacent pixel is left, it is added to the list of pixels to be returned, and the Node is popped.
+			//The non-white pixel values are somewhat arbitrary; when the pixel value is 1 (near-black), it has been added to the stacklist,
+			//but has not yet had its neighbours checked. The pixel value is set to 0 (black) when all neighbours have been checked.  
+			//As far as the software is concerned, the exact value of non-white pixels is irrelevant. 
 			if (src.at<uchar>(point.y - 1, point.x) == 255) //if adjacent pixel is white 
 			{
 				point = Point(point.x, point.y - 1);  //set adjacent pixel to be the current pixel
