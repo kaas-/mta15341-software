@@ -4,6 +4,12 @@
 #include "Segment.h"
 #include <vector>
 
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+
 using namespace cv;
 using namespace std;
 using namespace Segment;
@@ -16,6 +22,13 @@ Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
+Mat src; Mat src_gray;
+int thresh = 20;
+int max_thresh = 255;
+RNG rng(12345);
+
+void convexHullFunction(Mat threshold_output);
+
 Board board(gesture, hexArray);
 
 Hex findCurrentHex(Board currentBoard);
@@ -24,7 +37,7 @@ void changeCurrentColour(Hex hex, Player player);
 
 int runWebcam();
 
-Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration);
+//Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration);
 
 int main(int, char)
 {
@@ -57,10 +70,10 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-	//runWebcam();
+	runWebcam();
 
-	board.buildBoard();
-	board.drawBoard();
+	//board.buildBoard();
+	//board.drawBoard();
 
 	cin.get();
 	cin.get();
@@ -69,7 +82,7 @@ int main(int, char)
 
 int runWebcam()
 {
-	VideoCapture cap(0); // open the default camera
+	VideoCapture cap(1); // open the default camera
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
 	Mat frame;
@@ -83,45 +96,35 @@ int runWebcam()
 	Mat eroded2;
 	Mat frameArray;
 	
-	finalFrame = getWeightedFrames(cap, frame, frame2, finalFrame, 60);
-	//cout << frameArray.size();
+	Mat firstFrame;
+
+	cap >> firstFrame;
 
 	for (;;)
 	{
 		Mat current;
 		Mat dst;
 		Mat finaldst;
+		imshow("firstframe", firstFrame);
 		cap >> current; // get a new frame from camera
+		bool ok = cap.read(firstFrame);
+		if (!ok) continue;
 		cvtColor(current, current, CV_BGR2GRAY);
-		/*Scalar tempVal = mean(frameArray);
-		float myMatatMean = tempVal.val[0];*/
-		absdiff(current, finalFrame, dst);
-		//absdiff(myMatatMean, dst, dst);
-		//absdiff(current, dst, finaldst);
-		//absdiff(current, firstFrame, dst);
-		//absdiff(firstFrame, dst, dst);
-		//absdiff(current, dst, finaldst);
-		//GaussianBlur(frame, blur, Size(19, 19), 1.5, 1.5);
-		//threshold(blur, thres, 25, 255, THRESH_BINARY);
-		GaussianBlur(dst, gblur, Size(5, 5), 1.5, 1.5);
-		//blur(finaldst, gblur, Size(3, 3), Point(1, -1));
-		inRange(gblur, Scalar(21), Scalar(100), thres2);
+		cvtColor(firstFrame, firstFrame, CV_BGR2GRAY);
+
+		absdiff(current, firstFrame, dst);
+		absdiff(firstFrame, dst, dst);
+		absdiff(current, dst, finaldst);
 		
-		//threshold(gblur, thres1, 15, 255, THRESH_BINARY);
-		//adaptiveThreshold(gblur, thres1, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 111, 0);
-		//medianBlur(thres2, median, 5);
-		//cv::erode(thres, eroded, element);
+		GaussianBlur(dst, gblur, Size(5, 5), 1.5, 1.5);
+		
+		inRange(gblur, Scalar(25), Scalar(100), thres2); //around 20 <> 100 for IR lights
+		
 		morphologyEx(thres2, eroded1, MORPH_OPEN, element, Point(-1, -1), 1);
-		//morphologyEx(thres1, eroded, MORPH_CLOSE, element, Point(-1, -1), 1);
-		//medianBlur(eroded, eroded, 13);
+
 		imshow("current", current);
-		imshow("subtracted", dst);
-		//imshow("dst", finaldst);
-		//imshow("blur", gblur);
-		//imshow("mean", thres2);
-//		imshow("median", median);
-		//imshow("morph1", eroded1);
-		//imshow("morph2", eroded2);
+		imshow("subtracted", eroded1);
+		convexHullFunction(eroded1);
 		if (waitKey(30) >= 0)
 			break;
 	}
@@ -156,4 +159,35 @@ Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weigh
 		cout << "Weighing frames...";
 	}
 	return weightedFrame;
+}
+
+void convexHullFunction(Mat threshold_output)
+{
+	vector<vector<Point> > contours;
+	vector<Vec4i> hierarchy;
+
+	/// Find contours
+	findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+	/// Find the convex hull object for each contour
+	vector<vector<Point>>hull(contours.size());
+	for (int i = 0; i < contours.size(); i++)
+	{
+		convexHull(Mat(contours[i]), hull[i], false);
+	}
+
+	/// Draw contours + hull results
+	Mat drawing = Mat::zeros(threshold_output.size(), CV_8UC3);
+	for (int i = 0; i< contours.size(); i++)
+	{
+		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+		drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+		drawContours(drawing, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+		approxPolyDP(Mat(hull), contours, 0.0001, true);
+	}
+	cout << fabs(contourArea(Mat(contours)));
+
+1	/// Show in a window
+	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
+	imshow("Hull demo", drawing);
 }
