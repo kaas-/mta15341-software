@@ -18,7 +18,7 @@ Mat image;
 int dilation_size = 3;
 Gesture gesture(image, image);
 Scalar hexArray;
-Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
+//Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
@@ -26,6 +26,9 @@ Mat src; Mat src_gray;
 int thresh = 20;
 int max_thresh = 255;
 RNG rng(12345);
+
+Player players[3];
+Player currentPlayer = players[0];
 
 void convexHullFunction(Mat threshold_output);
 
@@ -36,6 +39,10 @@ Hex findCurrentHex(Board currentBoard);
 void changeCurrentColour(Hex hex, Player player);
 
 int runWebcam();
+
+void buildPlayerArray();
+
+void setCurrentPlayer(int i) { currentPlayer = players[i]; }
 
 //Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration);
 
@@ -137,10 +144,10 @@ int runWebcam()
 
 }*/
 
-void changeCurrentColour(Hex hex, Player player)
+/*void changeCurrentColour(Hex hex, Player player)
 {
 
-}
+}*/
 
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration)
 {
@@ -187,7 +194,14 @@ void convexHullFunction(Mat threshold_output)
 	}
 	cout << fabs(contourArea(Mat(contours)));
 
-1	/// Show in a window
+	/// Show in a window
 	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
 	imshow("Hull demo", drawing);
+}
+
+void buildPlayerArray()
+{
+	players[0] = Player(Colour::DESERT, "One");
+	players[1] = Player(Colour::FOREST, "Two");
+	players[2] = Player(Colour::MOUNTAIN, "Three");
 }

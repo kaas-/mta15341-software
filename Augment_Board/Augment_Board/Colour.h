@@ -31,6 +31,8 @@ public:
 	static const cv::Scalar RIVER;
 	static const cv::Scalar DEFAULT;
 
+	cv::Scalar getColourType() { return colourType; };
+
 
 	
 }

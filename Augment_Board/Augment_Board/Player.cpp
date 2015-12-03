@@ -3,7 +3,7 @@
 #include "Colour.h"
 
 //a Player object consists of a tile type (for colour), a string (for name), and a gesture (for starting and ending turns)
-Player::Player(Tile::Type t, std::string n, Gesture g)
+Player::Player(Colour t, std::string n)
 	: faction(t), name(n), gesture(g)
 {
 	/*Colours hello; 
@@ -44,7 +44,7 @@ Player::~Player()
 {
 }
 
-Tile::Type Player::getFaction()
+Colour Player::getFaction()
 {
 	return faction;
 }
