@@ -82,7 +82,7 @@ int main(int, char)
 
 int runWebcam()
 {
-	VideoCapture cap(1); // open the default camera
+	VideoCapture cap(0); // open the default camera
 	if (!cap.isOpened()) // check if we succeeded
 		return -1;
 	Mat frame;
@@ -115,7 +115,7 @@ int runWebcam()
 		absdiff(current, firstFrame, dst);
 		absdiff(firstFrame, dst, dst);
 		absdiff(current, dst, finaldst);
-		
+		imshow("bgsubtracted", dst);
 		GaussianBlur(dst, gblur, Size(5, 5), 1.5, 1.5);
 		
 		inRange(gblur, Scalar(25), Scalar(100), thres2); //around 20 <> 100 for IR lights
@@ -183,11 +183,21 @@ void convexHullFunction(Mat threshold_output)
 		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
 		drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
 		drawContours(drawing, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point());
-		approxPolyDP(Mat(hull), contours, 0.0001, true);
 	}
-	cout << fabs(contourArea(Mat(contours)));
+	
+	/// Go through all the contours and print their area.
+	for (int i = 0; i < contours.size(); i++)
+	{
+		double var = contourArea(hull[i]);
+		cout << "Object " << i << " has an area of: " << var << "\n";
+		if (var > 1000.0)
+		{
+			cout << "A HAND HAS BEEN FOUND! And it's Object " << i << "\n";
+		}
+	}
+	
 
-1	/// Show in a window
+	/// Show in a window
 	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
 	imshow("Hull demo", drawing);
 }
