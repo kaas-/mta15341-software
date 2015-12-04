@@ -12,6 +12,7 @@ private:
 	cv::Mat knownBlob;
 public:
 	Gesture(cv::Mat inputBlob, cv::Mat knownBlob);
+	Gesture();
 	~Gesture();
 	cv::Mat getInputBlob();
 	void setInputBlob(cv::Mat inputBlob);

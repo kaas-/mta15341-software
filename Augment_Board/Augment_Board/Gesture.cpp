@@ -6,6 +6,10 @@ Gesture::Gesture(cv::Mat i, cv::Mat k)
 {
 }
 
+Gesture::Gesture()
+{
+}
+
 Gesture::~Gesture()
 {
 }

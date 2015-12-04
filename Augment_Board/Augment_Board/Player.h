@@ -10,20 +10,22 @@
 class Player
 {
 private:
-	Tile::Type faction;
-	cv::Scalar colour;
+
+	cv::Scalar faction;
 	std::string name;
 	Gesture gesture;
 
 public:
-	Player(Tile::Type faction, std::string name, Gesture gesture);
+
+	Player(cv::Scalar faction, std::string name);
+	Player();
 	~Player();
-	Tile::Type getFaction();
+	cv::Scalar getFaction();
 	std::string getName();
 	void setName(std::string name);
 	Gesture getGesture();
 	void setGesture(Gesture gesture);
-	void setColourByType(Tile::Type); //make this a global/static method -- ALREADY USED TWICE JEEZ
+	void setColour(cv::Scalar s) { faction = s; }; //make this a global/static method -- ALREADY USED TWICE JEEZ
 };
 
 #endif

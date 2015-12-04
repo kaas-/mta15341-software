@@ -3,6 +3,7 @@
 #include "Board.h"
 #include "Segment.h"
 #include <vector>
+#include "Blob.h"
 
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -28,6 +29,9 @@ int thresh = 20;
 int max_thresh = 255;
 RNG rng(12345);
 
+Player players[3];
+Player currentPlayer;
+
 void convexHullFunction(Mat threshold_output);
 
 Board board(gesture, hexArray);
@@ -38,6 +42,10 @@ void changeCurrentColour(Hex hex, Player player);
 void Pointpoly();
 
 int runWebcam();
+
+void buildPlayerArray();
+
+//void setCurrentPlayer(int i) { currentPlayer = players[i]; }
 
 //Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration);
 
@@ -78,8 +86,8 @@ int main(int, char)
 	HexPoints = board.drawBoard();
 	Pointpoly();
 
-	cin.get();
-	cin.get();
+	//cin.get();
+	//cin.get();
 	return 0;
 }
 
@@ -98,6 +106,14 @@ int runWebcam()
 	Mat eroded1;
 	Mat eroded2;
 	Mat frameArray;
+	Mat blob;
+	list<Blob> blobList;
+	vector<vector<Point>> HexPoints;
+
+	for (vector<vector<Point>>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
+	{
+		/*do stuff with*/ &it;
+	}
 	
 	Mat firstFrame;
 
@@ -125,9 +141,16 @@ int runWebcam()
 		
 		morphologyEx(thres2, eroded1, MORPH_OPEN, element, Point(-1, -1), 1);
 
+//		blob = rgb2gray(eroded1);
+		blobList = burn(eroded1);
+
+
 		imshow("current", current);
 		imshow("subtracted", eroded1);
+		//imshow("grassfire", blob);
+
 		convexHullFunction(eroded1);
+
 		if (waitKey(30) >= 0)
 			break;
 	}
@@ -214,4 +237,12 @@ void convexHullFunction(Mat threshold_output)
 	/// Show in a window
 	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
 	imshow("Hull demo", drawing);
+}
+
+void buildPlayerArray()
+{
+	players[0] = Player(Colour::DESERT, "One");
+	players[1] = Player(Colour::FOREST, "Two");
+	players[2] = Player(Colour::MOUNTAIN, "Three");
+	currentPlayer = players[0];
 }
