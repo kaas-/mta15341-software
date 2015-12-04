@@ -39,7 +39,7 @@ bool convexHullFunction(Mat threshold_output, int minArea, int maxArea);
 void convexHullFunction(Mat threshold_output);
 
 
-Board board(gesture, hexArray);
+Board board;
 
 Hex findCurrentHex(Board currentBoard);
 
@@ -59,6 +59,10 @@ void setCurrentPlayer(int i) { currentPlayer = players[i]; }
 
 int main(int, char)
 {
+	image = imread("Test1.jpg", CV_LOAD_IMAGE_COLOR);
+	imshow("original", image);
+	namedWindow("Terra Mystica Board", WINDOW_NORMAL);
+	namedWindow("Terra Mystica Board 2", WINDOW_NORMAL);
 	/*board.buildBoard(gesture);
 	//prints out the type and colour of hex #100
 	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour() << "\n";
@@ -91,11 +95,38 @@ int main(int, char)
 	//runWebcam();
 
 	board.buildBoard();
-	HexPoints = board.drawBoard();
+
+
+	for (;;)
+	{
+		board.drawBoard(image);
+		imshow("Terra Mystica Board", image);
+		if (waitKey(30) >= 0)
+			break;
+
+	}
 	Pointpoly();
 
-	//cin.get();
-	//cin.get();
+	board.getHex(20).setColour(Colour::FOREST);
+	cout << board.getHex(20).getColour() << "=" << Colour::FOREST << endl;
+	board.getHex(21).setColour(Colour::FOREST);
+	cout << board.getHex(21).getColour() << "=" << Colour::FOREST << endl;
+	board.getHex(22).setColour(Colour::FOREST);
+	cout << board.getHex(22).getColour() << "=" << Colour::FOREST << endl;
+	board.getHex(23).setColour(Colour::FOREST);
+	cout << board.getHex(23).getColour() << "=" << Colour::FOREST << endl;
+
+	for (;;)
+	{
+		board.drawBoard(image);
+		imshow("Terra Mystica Board 2", image);
+		if (waitKey(30) >= 0)
+			break;
+
+	}
+
+	cin.get();
+	cin.get();
 	return 0;
 }
 
@@ -118,11 +149,6 @@ int runWebcam()
 	list<Blob> blobList;
 	vector<vector<Point>> HexPoints;
 
-	for (vector<vector<Point>>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
-	{
-		/*do stuff with*/ &it;
-	}
-	
 	Mat firstFrame;
 	cap >> firstFrame;
 
@@ -175,10 +201,10 @@ int runWebcam()
 
 void Pointpoly()
 {
-	for (vector<vector<Point>>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
+	for (int i = 0; i < 112; ++i)
 	{
 
-		cout << pointPolygonTest(*it, Point(1200, 1000), false) << endl;
+		cout << pointPolygonTest(board.getHex(i).getPoints(), Point(1200, 1000), false) << endl;
 	}
 	
 }

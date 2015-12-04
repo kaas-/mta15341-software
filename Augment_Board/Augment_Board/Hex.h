@@ -17,19 +17,19 @@ class Hex
 private:
 	//Tile::Type TileType;
 	Scalar colourType;
+	vector<Point> points;
 
 public:
 	Hex();
-	Hex(Scalar colourType);
+	Hex(Scalar colourType, vector<Point> points);
 	~Hex();
 
-	/*Scalar getColour();
-	void setColour(Scalar colour);
-	Scalar getTileType();
-	void setTileType(Scalar);*/
 	const char* getTileName();
-	vector<Point> drawHex(int x, int y, float h, Mat image, Scalar colour );
-	void changeHex(int x, int y, float h, Mat image, Scalar colour, bool gesture);
+	Scalar getColour() { return colourType; };
+	void setColour(Scalar s) { colourType = s; };
+	vector<Point> getPoints() { return points; };
+
+	void drawHex(Mat image);
 };
 
 #endif
