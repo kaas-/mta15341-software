@@ -107,14 +107,14 @@ int main(int, char)
 	}
 	Pointpoly();
 
-	board.getHex(20).setColour(Colour::FOREST);
-	cout << board.getHex(20).getColour() << "=" << Colour::FOREST << endl;
-	board.getHex(21).setColour(Colour::FOREST);
-	cout << board.getHex(21).getColour() << "=" << Colour::FOREST << endl;
-	board.getHex(22).setColour(Colour::FOREST);
-	cout << board.getHex(22).getColour() << "=" << Colour::FOREST << endl;
-	board.getHex(23).setColour(Colour::FOREST);
-	cout << board.getHex(23).getColour() << "=" << Colour::FOREST << endl;
+	board.HexPoints[20].setColour(Colour::FOREST);
+	cout << board.HexPoints[20].getColour() << "=" << Colour::FOREST << endl;
+	board.HexPoints[21].setColour(Colour::FOREST);
+	cout << board.HexPoints[21].getColour() << "=" << Colour::FOREST << endl;
+	board.HexPoints[22].setColour(Colour::FOREST);
+	cout << board.HexPoints[22].getColour() << "=" << Colour::FOREST << endl;
+	board.HexPoints[23].setColour(Colour::FOREST);
+	cout << board.HexPoints[23].getColour() << "=" << Colour::FOREST << endl;
 
 	for (;;)
 	{

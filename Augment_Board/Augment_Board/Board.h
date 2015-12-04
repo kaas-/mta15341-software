@@ -14,9 +14,10 @@ private:
 	Hex hex;
 	Gesture terraform;
 	Scalar hexArray[112];
-	vector<Hex> HexPoints;
 
 public:
+	vector<Hex> HexPoints;
+
 	Board();
 	~Board();
 
