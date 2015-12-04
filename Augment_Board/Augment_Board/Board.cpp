@@ -210,7 +210,7 @@ vector<vector<Point>> Board::drawBoard(){
 	for (int i = 0; i < 12; i++){
 		x1 += 2 * h;
 		anchors[i] = x1;
-		hello.drawHex(x1, y, h, image, hexArray[i]);
+		//hello.drawHex(x1, y, h, image, hexArray[i]);
 		HexPoints.push_back(hello.drawHex(x1, y, h, image, hexArray[i]));
 		
 	}
@@ -263,9 +263,9 @@ vector<vector<Point>> Board::drawBoard(){
 	}
 	namedWindow("Terra Mystica Board", WINDOW_NORMAL);
 	imshow("Terra Mystica Board", image);
-	return HexPoints;
 
-	waitKey(0);
+	delete anchors;
+	return HexPoints;
 }
 /*//getters and setters for hex
 Hex Board::getHex(int position)

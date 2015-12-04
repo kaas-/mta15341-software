@@ -13,7 +13,8 @@ class Board
 private:
 	Hex hex;
 	Gesture terraform;
-	Scalar hexArray[];
+	Scalar hexArray[112];
+	vector<vector<Point>> HexPoints;
 
 public:
 	Board(Gesture terraform, Scalar hexArray);

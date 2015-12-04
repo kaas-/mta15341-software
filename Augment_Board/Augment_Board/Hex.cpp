@@ -97,7 +97,7 @@ vector<Point> Hex::drawHex(int x, int y, float h, Mat image, Scalar colour ){
 		
 		fillConvexPoly(image, points, 6, colour, LINE_8,0);
 
-		cout << "\n" << pointPolygonTest(pointsVec, Point(x+1, y+1), false);
+		//cout << "\n" << pointPolygonTest(pointsVec, Point(x+1, y+1), false);
 		return pointsVec;
 
 	}
