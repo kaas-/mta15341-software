@@ -5,20 +5,21 @@
 #include <string>
 #include "Gesture.h"
 #include "Tile.h"
+#include "Colour.h"
 
 
 class Player
 {
 private:
-	Tile::Type faction;
+	Colour faction;
 	cv::Scalar colour;
 	std::string name;
 	Gesture gesture;
 
 public:
-	Player(Tile::Type faction, std::string name, Gesture gesture);
+	Player(Colour faction, std::string name);
 	~Player();
-	Tile::Type getFaction();
+	Colour getFaction();
 	std::string getName();
 	void setName(std::string name);
 	Gesture getGesture();

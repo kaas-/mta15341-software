@@ -18,7 +18,7 @@ Mat image;
 int dilation_size = 3;
 Gesture gesture(image, image);
 Scalar hexArray;
-Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
+//Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
@@ -27,9 +27,16 @@ int thresh = 20;
 int max_thresh = 255;
 RNG rng(12345);
 
+<<<<<<< HEAD
 int detectionHits = 0;
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration);
 bool convexHullFunction(Mat threshold_output, int minArea, int maxArea);
+=======
+Player players[3];
+Player currentPlayer = players[0];
+
+void convexHullFunction(Mat threshold_output);
+>>>>>>> 4c43103b9b9ad646aa6715425c53fae23ca85b1a
 
 Board board(gesture, hexArray);
 
@@ -38,6 +45,10 @@ Hex findCurrentHex(Board currentBoard);
 void changeCurrentColour(Hex hex, Player player);
 
 int runWebcam();
+
+void buildPlayerArray();
+
+void setCurrentPlayer(int i) { currentPlayer = players[i]; }
 
 //Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration);
 
@@ -142,10 +153,10 @@ int runWebcam()
 
 }*/
 
-void changeCurrentColour(Hex hex, Player player)
+/*void changeCurrentColour(Hex hex, Player player)
 {
 
-}
+}*/
 
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration)
 {
@@ -224,6 +235,7 @@ bool convexHullFunction(Mat threshold_output, int minArea, int maxArea)
 	/// Show in a window
 	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
 	imshow("Hull demo", drawing);
+<<<<<<< HEAD
 
 	if (detectionHits > 15)
 	{
@@ -231,4 +243,13 @@ bool convexHullFunction(Mat threshold_output, int minArea, int maxArea)
 		return true;
 	}
 	else { return false; }
+=======
+}
+
+void buildPlayerArray()
+{
+	players[0] = Player(Colour::DESERT, "One");
+	players[1] = Player(Colour::FOREST, "Two");
+	players[2] = Player(Colour::MOUNTAIN, "Three");
+>>>>>>> 4c43103b9b9ad646aa6715425c53fae23ca85b1a
 }
