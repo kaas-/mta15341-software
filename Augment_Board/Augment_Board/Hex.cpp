@@ -2,7 +2,6 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp" 
 #include "opencv2/highgui/highgui.hpp"
-#include "types_c.h"
 using namespace std;
 using namespace cv;
 
@@ -84,7 +83,7 @@ Scalar Hex::getTileType()
 
 
 //This draws the actual hex
-void Hex::drawHex(int x, int y, float h, Mat image, Scalar colour ){
+vector<Point> Hex::drawHex(int x, int y, float h, Mat image, Scalar colour ){
 	float r = (2.0 / 3.0) * (sqrt(3.0) * h);
 	
 		Point a(x, y);
@@ -94,34 +93,17 @@ void Hex::drawHex(int x, int y, float h, Mat image, Scalar colour ){
 		Point e(x - h, y + (1.5*r));
 		Point f(x- h, y + (0.5*r));
 		Point points[6] = { a, b, c, d, e, f };
-
+		vector<Point> pointsVec = { a, b, c, d, e, f };
+		
 		fillConvexPoly(image, points, 6, colour, LINE_8,0);
+
+		cout << "\n" << pointPolygonTest(pointsVec, Point(x+1, y+1), false);
+		return pointsVec;
+
 	}
 void Hex::changeHex(int x, int y, float h, Mat image, Scalar colour, bool gesture){
-	float r = (2.0 / 3.0) * (sqrt(3.0) * h);
-	Point a(x, y);
-	Point b(x + h, y + (0.5*r));
-	Point c(x + h, y + (1.5*r));
-	Point d(x, y + (2 * r));
-	Point e(x - h, y + (1.5*r));
-	Point f(x - h, y + (0.5*r));
-	Point points[6] = { a, b, c, d, e, f };
-	
 
-
-	if (pointPolygonTest(points, mouseclick, gesture==false) == true){
-
-		
-
-		fillConvexPoly(image, points, 6, colour, LINE_8, 0);
-	}
-	
-};
-double cv::pointPolygonTest(InputArray 	points,
-	Point2f 	pt,
-	bool 	measureDist
-	)
-	
+}
 	
 
 

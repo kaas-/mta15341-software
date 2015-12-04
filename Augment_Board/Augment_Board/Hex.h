@@ -28,7 +28,7 @@ public:
 	Scalar getTileType();
 	void setTileType(Scalar);*/
 	const char* getTileName();
-	void drawHex(int x, int y, float h, Mat image, Scalar colour );
+	vector<Point> drawHex(int x, int y, float h, Mat image, Scalar colour );
 	void changeHex(int x, int y, float h, Mat image, Scalar colour, bool gesture);
 };
 

@@ -177,10 +177,6 @@ void Board::buildBoard()
 	/*Hex tile;
 	tile.setColourType(Tile::Type::MOUNTAINS);
 	tile = drawHex(x2, y + (15 / 2)*r, h, image, tile.getTileType);*/
-	
-		
-		
-		
 		
 		
 		//currently defining ALL hexes as RIVER tiles. not finale.
@@ -188,10 +184,15 @@ void Board::buildBoard()
 //The function that actually draws the board. This needs an´image to print on, some x,y coordinates for the top of the hexes 
 //and then it needs an h input which is the distance from the center of the hex to a flat side.
 //This function draws nine lines of hexes via for loops that changes the x coodinate every time it runs.
-void Board::drawBoard(){
+
+vector<vector<Point>> Board::drawBoard(){
+	vector<vector<Point>> HexPoints;
 	Mat image;
 	Hex hello;
+	Mat gray;
 	image = imread("Test1.jpg", CV_LOAD_IMAGE_COLOR);
+	cvtColor(image, image, CV_BGR2GRAY);
+	threshold(image, gray, 200, 255, THRESH_BINARY);
 	int* anchors = new int[112];
 	int x1 = 978;
 	int x2 = 900;
@@ -210,6 +211,8 @@ void Board::drawBoard(){
 		x1 += 2 * h;
 		anchors[i] = x1;
 		hello.drawHex(x1, y, h, image, hexArray[i]);
+		HexPoints.push_back(hello.drawHex(x1, y, h, image, hexArray[i]));
+		
 	}
 	for (int i = 12; i < 25; i++){
 		x2 += 2 * h;
@@ -260,6 +263,7 @@ void Board::drawBoard(){
 	}
 	namedWindow("Terra Mystica Board", WINDOW_NORMAL);
 	imshow("Terra Mystica Board", image);
+	return HexPoints;
 
 	waitKey(0);
 }

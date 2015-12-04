@@ -22,6 +22,7 @@ Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
+vector<vector<Point>> HexPoints;
 Mat src; Mat src_gray;
 int thresh = 20;
 int max_thresh = 255;
@@ -34,6 +35,7 @@ Board board(gesture, hexArray);
 Hex findCurrentHex(Board currentBoard);
 
 void changeCurrentColour(Hex hex, Player player);
+void Pointpoly();
 
 int runWebcam();
 
@@ -70,10 +72,11 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-	runWebcam();
+	//runWebcam();
 
-	//board.buildBoard();
-	//board.drawBoard();
+	board.buildBoard();
+	HexPoints = board.drawBoard();
+	Pointpoly();
 
 	cin.get();
 	cin.get();
@@ -140,6 +143,15 @@ int runWebcam()
 void changeCurrentColour(Hex hex, Player player)
 {
 
+}
+
+void Pointpoly()
+{
+	for (vector<vector<Point>>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
+	{
+		cout << "\n" << pointPolygonTest(*it, Point(50, 50), false);
+	}
+	
 }
 
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration)
