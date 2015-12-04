@@ -5,6 +5,7 @@
 #include <string>
 #include "Gesture.h"
 #include "Tile.h"
+#include "Colour.h"
 
 
 class Player

@@ -24,7 +24,6 @@ public:
 	vector<vector<Point>> drawBoard();
 	Hex getHex(int i) { return hexArray[i]; };
 	//void setHex(Hex h, int i) { hexArray[i] = h };
-
 };
 
 #endif

@@ -19,7 +19,7 @@ Mat image;
 int dilation_size = 3;
 Gesture gesture(image, image);
 Scalar hexArray;
-Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
+//Player currentPlayer(Tile::Type::BADLANDS,"GIANTS", gesture);
 //Hex currentHex;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
 
@@ -29,10 +29,15 @@ int thresh = 20;
 int max_thresh = 255;
 RNG rng(12345);
 
-Player players[3];
-Player currentPlayer;
+int detectionHits = 0;
+Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration);
+bool convexHullFunction(Mat threshold_output, int minArea, int maxArea);
+
+
+
 
 void convexHullFunction(Mat threshold_output);
+
 
 Board board(gesture, hexArray);
 
@@ -43,9 +48,12 @@ void Pointpoly();
 
 int runWebcam();
 
-void buildPlayerArray();
+Player players[3];
+Player currentPlayer = players[0];
 
-//void setCurrentPlayer(int i) { currentPlayer = players[i]; }
+void buildPlayerArray();
+void setCurrentPlayer(int i) { currentPlayer = players[i]; }
+
 
 //Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration);
 
@@ -116,7 +124,6 @@ int runWebcam()
 	}
 	
 	Mat firstFrame;
-
 	cap >> firstFrame;
 
 	for (;;)
@@ -133,23 +140,20 @@ int runWebcam()
 
 		absdiff(current, firstFrame, dst);
 		absdiff(firstFrame, dst, dst);
-		absdiff(current, dst, finaldst);
-		imshow("bgsubtracted", dst);
+		//absdiff(current, dst, finaldst);
+		
+
+		//imshow("bgsubtracted", dst);
 		GaussianBlur(dst, gblur, Size(5, 5), 1.5, 1.5);
 		
-		inRange(gblur, Scalar(25), Scalar(100), thres2); //around 20 <> 100 for IR lights
-		
+		threshold(gblur, thres2, 25, 255, CV_THRESH_BINARY);
+
 		morphologyEx(thres2, eroded1, MORPH_OPEN, element, Point(-1, -1), 1);
 
-//		blob = rgb2gray(eroded1);
-		blobList = burn(eroded1);
-
-
-		imshow("current", current);
-		imshow("subtracted", eroded1);
-		//imshow("grassfire", blob);
-
-		convexHullFunction(eroded1);
+		imshow("Threshold", thres2);
+		//imshow("current", current);
+		imshow("eroded", eroded1);
+		convexHullFunction(eroded1,10000,20000);
 
 		if (waitKey(30) >= 0)
 			break;
@@ -164,10 +168,10 @@ int runWebcam()
 
 }*/
 
-void changeCurrentColour(Hex hex, Player player)
+/*void changeCurrentColour(Hex hex, Player player)
 {
 
-}
+}*/
 
 void Pointpoly()
 {
@@ -179,10 +183,11 @@ void Pointpoly()
 	
 }
 
-Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weightedFrame, int duration)
+
+Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration)
 {
 	cap >> firstFrame;
-	nextFrame = firstFrame.clone();
+	Mat nextFrame = firstFrame.clone();
 	weightedFrame = firstFrame.clone();
 	cap.grab();
 	cap.retrieve(nextFrame);
@@ -192,13 +197,15 @@ Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat nextFrame, Mat weigh
 
 	for (int i = 0; i < duration; i++)
 	{
-		getWeightedFrames(cap, firstFrame, weightedFrame, weightedFrame, duration);
+		cap >> firstFrame;
+		cvtColor(firstFrame, firstFrame, CV_BGR2GRAY);
+		addWeighted(firstFrame, 0.95, weightedFrame, 0.05, 0.0, weightedFrame);
 		cout << "Weighing frames...";
 	}
 	return weightedFrame;
 }
 
-void convexHullFunction(Mat threshold_output)
+bool convexHullFunction(Mat threshold_output, int minArea, int maxArea)
 {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
@@ -218,25 +225,50 @@ void convexHullFunction(Mat threshold_output)
 	for (int i = 0; i< contours.size(); i++)
 	{
 		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
-		drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
-		drawContours(drawing, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+		if (contourArea(hull[i]) > 500)
+		{
+			//drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+			drawContours(drawing, hull, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+		}
 	}
+	
 	
 	/// Go through all the contours and print their area.
 	for (int i = 0; i < contours.size(); i++)
 	{
 		double var = contourArea(hull[i]);
-		cout << "Object " << i << " has an area of: " << var << "\n";
-		if (var > 1000.0)
+		//cout << "Object " << i << " has an area of: " << var << "\n";
+		if (var > minArea && var < maxArea)
 		{
-			cout << "A HAND HAS BEEN FOUND! And it's Object " << i << "\n";
+			detectionHits++;
+			if (var > 15000) 
+			{
+				cout << "Whole hand has been detected \n";
+				cout << "Object " << i << " has an area of: " << var << "\n";
+			}
+			if (var > 10000 && var < 150000)
+			{
+				cout << "Less than a whole hand has been detected \n";
+				cout << "Object " << i << " has an area of: " << var << "\n";
+			}
+			
+			
 		}
+		
 	}
 	
 
 	/// Show in a window
 	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE);
 	imshow("Hull demo", drawing);
+
+	if (detectionHits > 15)
+	{
+		cout << "A HAND HAS BEEN FOUND! \n";
+		return true;
+	}
+	else { return false; }
+
 }
 
 void buildPlayerArray()
@@ -244,5 +276,6 @@ void buildPlayerArray()
 	players[0] = Player(Colour::DESERT, "One");
 	players[1] = Player(Colour::FOREST, "Two");
 	players[2] = Player(Colour::MOUNTAIN, "Three");
+
 	currentPlayer = players[0];
 }

@@ -6,6 +6,7 @@
 
 Player::Player(cv::Scalar t, std::string n)
 	: faction(t), name(n)
+
 {
 	/*Colours hello; 
 	//takes the tile type assigned to the player, and gives it a coresponding colour, just like in hex.cpp
@@ -48,6 +49,7 @@ Player::Player()
 Player::~Player()
 {
 }
+
 
 cv::Scalar Player::getFaction()
 {
