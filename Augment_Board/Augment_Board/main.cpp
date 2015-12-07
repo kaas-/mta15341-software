@@ -31,13 +31,12 @@ RNG rng(12345);
 
 int detectionHits = 0;
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration);
-bool convexHullFunction(Mat threshold_output, int minArea, int maxArea);
+bool hu(Mat threshold_output, int minArea, int maxArea);
 
 
 
 
-void convexHullFunction(Mat threshold_output);
-
+void convexHullFunction(Mat threshold_output, int minArea, int maxArea);
 
 Board board(gesture, hexArray);
 
@@ -88,14 +87,14 @@ int main(int, char)
 	waitKey(0);
 
 	return 0;*/
-	//runWebcam();
+	runWebcam();
 
-	board.buildBoard();
-	HexPoints = board.drawBoard();
-	Pointpoly();
+	//board.buildBoard();
+	//HexPoints = board.drawBoard();
+	//Pointpoly();
 
-	//cin.get();
-	//cin.get();
+	cin.get();
+	cin.get();
 	return 0;
 }
 
@@ -153,7 +152,7 @@ int runWebcam()
 		imshow("Threshold", thres2);
 		//imshow("current", current);
 		imshow("eroded", eroded1);
-		convexHullFunction(eroded1,10000,20000);
+		convexHullFunction(eroded1, 10000, 20000);
 
 		if (waitKey(30) >= 0)
 			break;
@@ -205,7 +204,7 @@ Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int d
 	return weightedFrame;
 }
 
-bool convexHullFunction(Mat threshold_output, int minArea, int maxArea)
+void convexHullFunction(Mat threshold_output, int minArea, int maxArea)
 {
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
@@ -233,27 +232,33 @@ bool convexHullFunction(Mat threshold_output, int minArea, int maxArea)
 	}
 	
 	
+
+	
 	/// Go through all the contours and print their area.
 	for (int i = 0; i < contours.size(); i++)
 	{
-		double var = contourArea(hull[i]);
-		//cout << "Object " << i << " has an area of: " << var << "\n";
-		if (var > minArea && var < maxArea)
+		Moments mo = moments(hull[i]);
+		Point center = Point(mo.m10 / mo.m00, mo.m01 / mo.m00);
+
+		double area = contourArea(hull[i]);
+		//cout << "Object " << i << " has an area of: " << area << "\n";
+		if (area > minArea && area < maxArea)
 		{
 			detectionHits++;
-			if (var > 15000) 
+			if (area > 15000) 
 			{
 				cout << "Whole hand has been detected \n";
-				cout << "Object " << i << " has an area of: " << var << "\n";
+				cout << "Object " << i << " has an area of: " << area << "\n";
+				cout << "Center of contour" << center;
 			}
-			if (var > 10000 && var < 150000)
+			if (area > 10000 && area < 150000)
 			{
 				cout << "Less than a whole hand has been detected \n";
-				cout << "Object " << i << " has an area of: " << var << "\n";
+				cout << "Object " << i << " has an area of: " << area << "\n";
+				cout << "Center of contour" << center;
 			}
-			
-			
 		}
+		
 		
 	}
 	
@@ -265,10 +270,7 @@ bool convexHullFunction(Mat threshold_output, int minArea, int maxArea)
 	if (detectionHits > 15)
 	{
 		cout << "A HAND HAS BEEN FOUND! \n";
-		return true;
 	}
-	else { return false; }
-
 }
 
 void buildPlayerArray()
