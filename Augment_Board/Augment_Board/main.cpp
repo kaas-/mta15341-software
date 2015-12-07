@@ -33,12 +33,17 @@ int detectionHits = 0;
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration);
 bool hu(Mat threshold_output, int minArea, int maxArea);
 
+<<<<<<< HEAD
 
 
 
 void convexHullFunction(Mat threshold_output, int minArea, int maxArea);
+=======
+void convexHullFunction(Mat threshold_output);
 
-Board board(gesture, hexArray);
+>>>>>>> f7659f1d84ae46a1bc77b80356af543585279327
+
+Board board;
 
 Hex findCurrentHex(Board currentBoard);
 
@@ -48,7 +53,7 @@ void Pointpoly();
 int runWebcam();
 
 Player players[3];
-Player currentPlayer = players[0];
+int currentPlayer = 0;
 
 void buildPlayerArray();
 void setCurrentPlayer(int i) { currentPlayer = players[i]; }
@@ -58,6 +63,9 @@ void setCurrentPlayer(int i) { currentPlayer = players[i]; }
 
 int main(int, char)
 {
+	image = imread("Test1.jpg", CV_LOAD_IMAGE_COLOR);
+	namedWindow("Terra Mystica Board", WINDOW_NORMAL);
+	namedWindow("Terra Mystica Board 2", WINDOW_NORMAL);
 	/*board.buildBoard(gesture);
 	//prints out the type and colour of hex #100
 	cout << "Hex type is: " << board.getHex(100).getTileName() << ", and has colour " << board.getHex(100).getColour() << "\n";
@@ -89,10 +97,44 @@ int main(int, char)
 	return 0;*/
 	runWebcam();
 
+<<<<<<< HEAD
 	//board.buildBoard();
 	//HexPoints = board.drawBoard();
 	//Pointpoly();
 
+=======
+	board.buildBoard();
+
+	//Draw the original board.
+	for (;;)
+	{
+		board.drawBoard(image);
+		imshow("Terra Mystica Board", image);
+		if (waitKey(30) >= 0)
+			break;
+
+	}
+	
+	//Check whether a given point is within a Hex and change the colour unless it's a river.
+	for (int i = 0; i < 112; ++i)
+	{
+		if (board.getHex(i).Pointpoly(Point(1400, 1200)) && board.getHex(i).getColour() != Colour::RIVER)
+		{
+			board.changeHex(i, players[currentPlayer].getFaction());
+		}
+	}
+
+	//Draw the new board.
+	for (;;)
+	{
+		board.drawBoard(image);
+		imshow("Terra Mystica Board 2", image);
+		if (waitKey(30) >= 0)
+			break;
+
+	}
+
+>>>>>>> f7659f1d84ae46a1bc77b80356af543585279327
 	cin.get();
 	cin.get();
 	return 0;
@@ -117,11 +159,6 @@ int runWebcam()
 	list<Blob> blobList;
 	vector<vector<Point>> HexPoints;
 
-	for (vector<vector<Point>>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
-	{
-		/*do stuff with*/ &it;
-	}
-	
 	Mat firstFrame;
 	cap >> firstFrame;
 
@@ -160,28 +197,6 @@ int runWebcam()
 	// the camera will be deinitialized automatically in VideoCapture destructor
 	return 0;
 }
-
-/*Hex findCurrentHex(Board currentBoard)
-{ 
-
-
-}*/
-
-/*void changeCurrentColour(Hex hex, Player player)
-{
-
-}*/
-
-void Pointpoly()
-{
-	for (vector<vector<Point>>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
-	{
-
-		cout << pointPolygonTest(*it, Point(1200, 1000), false) << endl;
-	}
-	
-}
-
 
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration)
 {
@@ -279,5 +294,17 @@ void buildPlayerArray()
 	players[1] = Player(Colour::FOREST, "Two");
 	players[2] = Player(Colour::MOUNTAIN, "Three");
 
-	currentPlayer = players[0];
+	currentPlayer = 0;
+}
+
+void nextPlayerTurn()
+{
+	if (currentPlayer >= 2)
+	{
+		currentPlayer = 0;
+	}
+	else
+	{
+		currentPlayer++;
+	}
 }
