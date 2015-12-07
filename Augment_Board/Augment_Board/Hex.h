@@ -28,6 +28,7 @@ public:
 	Scalar getColour() { return colourType; };
 	void setColour(Scalar s) { colourType = s; };
 	vector<Point> getPoints() { return points; };
+	bool Hex::Pointpoly(Point p);
 
 	void drawHex(Mat image);
 };

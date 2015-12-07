@@ -33,9 +33,6 @@ int detectionHits = 0;
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration);
 bool convexHullFunction(Mat threshold_output, int minArea, int maxArea);
 
-
-
-
 void convexHullFunction(Mat threshold_output);
 
 
@@ -49,7 +46,7 @@ void Pointpoly();
 int runWebcam();
 
 Player players[3];
-Player currentPlayer = players[0];
+int currentPlayer = 0;
 
 void buildPlayerArray();
 void setCurrentPlayer(int i) { currentPlayer = players[i]; }
@@ -60,7 +57,6 @@ void setCurrentPlayer(int i) { currentPlayer = players[i]; }
 int main(int, char)
 {
 	image = imread("Test1.jpg", CV_LOAD_IMAGE_COLOR);
-	imshow("original", image);
 	namedWindow("Terra Mystica Board", WINDOW_NORMAL);
 	namedWindow("Terra Mystica Board 2", WINDOW_NORMAL);
 	/*board.buildBoard(gesture);
@@ -96,7 +92,7 @@ int main(int, char)
 
 	board.buildBoard();
 
-
+	//Draw the original board.
 	for (;;)
 	{
 		board.drawBoard(image);
@@ -105,17 +101,17 @@ int main(int, char)
 			break;
 
 	}
-	Pointpoly();
+	
+	//Check whether a given point is within a Hex and change the colour unless it's a river.
+	for (int i = 0; i < 112; ++i)
+	{
+		if (board.getHex(i).Pointpoly(Point(1400, 1200)) && board.getHex(i).getColour() != Colour::RIVER)
+		{
+			board.changeHex(i, players[currentPlayer].getFaction());
+		}
+	}
 
-	board.HexPoints[20].setColour(Colour::FOREST);
-	cout << board.HexPoints[20].getColour() << "=" << Colour::FOREST << endl;
-	board.HexPoints[21].setColour(Colour::FOREST);
-	cout << board.HexPoints[21].getColour() << "=" << Colour::FOREST << endl;
-	board.HexPoints[22].setColour(Colour::FOREST);
-	cout << board.HexPoints[22].getColour() << "=" << Colour::FOREST << endl;
-	board.HexPoints[23].setColour(Colour::FOREST);
-	cout << board.HexPoints[23].getColour() << "=" << Colour::FOREST << endl;
-
+	//Draw the new board.
 	for (;;)
 	{
 		board.drawBoard(image);
@@ -187,28 +183,6 @@ int runWebcam()
 	// the camera will be deinitialized automatically in VideoCapture destructor
 	return 0;
 }
-
-/*Hex findCurrentHex(Board currentBoard)
-{ 
-
-
-}*/
-
-/*void changeCurrentColour(Hex hex, Player player)
-{
-
-}*/
-
-void Pointpoly()
-{
-	for (int i = 0; i < 112; ++i)
-	{
-
-		cout << pointPolygonTest(board.getHex(i).getPoints(), Point(1200, 1000), false) << endl;
-	}
-	
-}
-
 
 Mat getWeightedFrames(VideoCapture cap, Mat firstFrame, Mat weightedFrame, int duration)
 {
@@ -303,5 +277,17 @@ void buildPlayerArray()
 	players[1] = Player(Colour::FOREST, "Two");
 	players[2] = Player(Colour::MOUNTAIN, "Three");
 
-	currentPlayer = players[0];
+	currentPlayer = 0;
+}
+
+void nextPlayerTurn()
+{
+	if (currentPlayer >= 2)
+	{
+		currentPlayer = 0;
+	}
+	else
+	{
+		currentPlayer++;
+	}
 }

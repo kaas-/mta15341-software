@@ -14,9 +14,10 @@ private:
 	Hex hex;
 	Gesture terraform;
 	Scalar hexArray[112];
+	vector<Hex> HexPoints;
 
 public:
-	vector<Hex> HexPoints;
+
 
 	Board();
 	~Board();
@@ -24,6 +25,7 @@ public:
 	void buildHex(int x, int y, float h, Scalar colour);
 	void buildBoard();
 	void drawBoard(Mat image);
+	void changeHex(int i, Scalar s) { HexPoints[i].setColour(s); };
 	Hex getHex(int i) { return HexPoints[i]; };
 	//void setHex(Hex h, int i) { hexArray[i] = h };
 };
