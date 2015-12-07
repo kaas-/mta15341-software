@@ -46,10 +46,3 @@ bool Hex::Pointpoly(Point p)
 		return false;
 	}
 }
-
-	
-
-
-
-
-
