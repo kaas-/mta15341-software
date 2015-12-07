@@ -35,13 +35,13 @@ void Board::buildHex(int x, int y, float h, Scalar colour) {
 	Hex hex = Hex(colour, pointsVec);
 	HexPoints.push_back(hex);
 }
-
+ //TOP LEFT (60, 440)
 //method for going through the hex array
 //this method probably shouldn't return "void". This should be looked at
 void Board::buildBoard()
 {
 	int* anchors = new int[112];
-	int x1 = 978;
+	int x1 = 978; //505,150
 	int x2 = 900;
 	int x3 = 978;
 	int x4 = 900;
@@ -233,38 +233,7 @@ void Board::buildBoard()
 		buildHex(x9, y + (12 * r), h, hexArray[i]);
 	}
 	delete anchors;
-
 }
-	//Tile::Type row1[13] = { Tile::Type::PLAINS, Tile::Type::RIVER , Tile::Type::PLAINS, Tile::Type::SWAMPS, DESERT, Tile::Type::RIVER  , Tile::Type::MOUNTAINS , FOREST  , BADLANDS  , LAKES  , DESERT , LAKES  };
-	/*Tile::Type colours[112] = { Tile::Type::PLAINS, Tile::Type::RIVER, Tile::Type::PLAINS, Tile::Type::SWAMPS, DESERT, Tile::Type::RIVER, Tile::Type::MOUNTAINS, FOREST, BADLANDS, LAKES, DESERT, LAKES,
-		BADLANDS, DESERT, Tile::Type::RIVER , LAKES, Tile::Type::MOUNTAINS, BADLANDS, Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::RIVER , DESERT, Tile::Type::PLAINS, Tile::Type::SWAMPS, Tile::Type::MOUNTAINS,
-		FOREST, Tile::Type::SWAMPS, Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::PLAINS, FOREST, DESERT, Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::RIVER ,
-		DESERT, Tile::Type::MOUNTAINS, FOREST, DESERT, Tile::Type::SWAMPS, Tile::Type::RIVER , LAKES, BADLANDS, Tile::Type::PLAINS, Tile::Type::RIVER , FOREST, LAKES, FOREST,
-		Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::PLAINS, Tile::Type::RIVER , Tile::Type::RIVER , BADLANDS, Tile::Type::SWAMPS, FOREST, Tile::Type::MOUNTAINS, Tile::Type::RIVER , Tile::Type::PLAINS, Tile::Type::SWAMPS,
-		FOREST, BADLANDS, Tile::Type::RIVER , Tile::Type::RIVER , FOREST, Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::RIVER , Tile::Type::PLAINS, LAKES, Tile::Type::RIVER , Tile::Type::MOUNTAINS, BADLANDS,
-		Tile::Type::MOUNTAINS, Tile::Type::RIVER , DESERT, Tile::Type::MOUNTAINS, LAKES, BADLANDS, FOREST, Tile::Type::RIVER , BADLANDS, Tile::Type::MOUNTAINS, Tile::Type::RIVER , Tile::Type::SWAMPS,
-		Tile::Type::SWAMPS, LAKES, Tile::Type::RIVER , Tile::Type::SWAMPS, Tile::Type::PLAINS, Tile::Type::MOUNTAINS, LAKES, Tile::Type::RIVER , DESERT, Tile::Type::SWAMPS, Tile::Type::RIVER , BADLANDS, LAKES,
-		Tile::Type::MOUNTAINS, FOREST, Tile::Type::RIVER , BADLANDS, DESERT, Tile::Type::SWAMPS, DESERT, Tile::Type::RIVER , LAKES, Tile::Type::PLAINS, Tile::Type::RIVER , Tile::Type::PLAINS };*/
-
-/*	Scalar colours[112] = { Scalar(0, 75, 150), Scalar(255, 255, 0), Scalar(0, 75, 150), Scalar(0, 0, 0), Scalar(0, 255, 255), Scalar(255, 255, 0), Scalar(179, 179, 179), Scalar(0, 189, 0), Scalar(0, 0, 255), Scalar(255, 0, 0), Scalar(0, 255, 255), Scalar(255, 0, 0),
-		Scalar(0, 0, 255), Scalar(0, 255, 255), Scalar(255, 255, 0), Scalar(255, 0, 0), Scalar(179, 179, 179), Scalar(0, 0, 255), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(0, 255, 255), Scalar(0, 75, 150), Scalar(0, 0, 0), Scalar(179, 179, 179),
-		Scalar(0, 189, 0), Scalar(0, 0, 0), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(0, 75, 150), Scalar(0, 189, 0), Scalar(0, 255, 255), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(255, 255, 0),
-		Scalar(0, 255, 255), Scalar(179, 179, 179), Scalar(0, 189, 0), Scalar(0, 255, 255), Scalar(0, 0, 0), Scalar(255, 255, 0), Scalar(255, 0, 0), Scalar(0, 0, 255), Scalar(0, 75, 150), Scalar(255, 255, 0), Scalar(0, 189, 0), Scalar(255, 0, 0), Scalar(0, 189, 0),
-		Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(0, 75, 150), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(0, 0, 255), Scalar(0, 0, 0), Scalar(0, 189, 0), Scalar(179, 179, 179), Scalar(255, 255, 0), Scalar(0, 75, 150), Scalar(0, 0, 0),
-		Scalar(0, 189, 0), Scalar(0, 0, 255), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(0, 189, 0), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(255, 255, 0), Scalar(0, 75, 150), Scalar(255, 0, 0), Scalar(255, 255, 0), Scalar(179, 179, 179), Scalar(0, 0, 255),
-		Scalar(179, 179, 179), Scalar(255, 255, 0), Scalar(0, 255, 255), Scalar(179, 179, 179), Scalar(255, 0, 0), Scalar(0, 0, 255), Scalar(0, 189, 0), Scalar(255, 255, 0), Scalar(0, 0, 255), Scalar(179, 179, 179), Scalar(255, 255, 0), Scalar(0, 0, 0),
-		Scalar(0, 0, 0), Scalar(255, 0, 0), Scalar(255, 255, 0), Scalar(0, 0, 0), Scalar(0, 75, 150), Scalar(179, 179, 179), Scalar(255, 0, 0), Scalar(255, 255, 0), Scalar(0, 255, 255), Scalar(0, 0, 0), Scalar(255, 255, 0), Scalar(0, 0, 255), Scalar(255, 0, 0),
-		Scalar(179, 179, 179), Scalar(0, 189, 0), Scalar(255, 255, 0), Scalar(0, 0, 255), Scalar(0, 255, 255), Scalar(0, 0, 0), Scalar(0, 255, 255), Scalar(255, 255, 0), Scalar(255, 0, 0), Scalar(0, 75, 150), Scalar(255, 255, 0), Scalar(0, 75, 150) };*/
-	
-	
-	
-	/*Hex tile;
-	tile.setColourType(Tile::Type::MOUNTAINS);
-	tile = drawHex(x2, y + (15 / 2)*r, h, image, tile.getTileType);*/
-		
-		
-		//currently defining ALL hexes as RIVER tiles. not finale.
-		//hex[i].setColourType(Tile::Type::RIVER);
 //The function that actually draws the board. This needs an´image to print on, some x,y coordinates for the top of the hexes 
 //and then it needs an h input which is the distance from the center of the hex to a flat side.
 //This function draws nine lines of hexes via for loops that changes the x coodinate every time it runs.
