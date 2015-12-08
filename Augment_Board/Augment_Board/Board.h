@@ -27,7 +27,7 @@ public:
 	void drawBoard(Mat image);
 	void changeHex(int i, Scalar s) { HexPoints[i].setColour(s); };
 	Hex getHex(int i) { return HexPoints[i]; };
-	//void setHex(Hex h, int i) { hexArray[i] = h };
+	
 };
 
 #endif

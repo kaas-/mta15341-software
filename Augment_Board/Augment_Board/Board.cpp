@@ -8,9 +8,6 @@
 using namespace std;
 using namespace cv;
 
-//makes an array of hexes, capable of containing 112 of them
-
-Scalar hexArray[112];
 Board::Board()
 {
 }
@@ -21,12 +18,18 @@ Board::~Board()
 }
 
 void Board::buildHex(int x, int y, float h, Scalar colour) {
+
+
+	//calculate radius of hexagon
 	float r = (2.0 / 3.0) * (sqrt(3.0) * h);
+	cout << endl << "Radius: " << r << endl;
+
 
 	Point a(x, y);
 	Point b(x + h, y + (0.5*r));
 	Point c(x + h, y + (1.5*r));
 	Point d(x, y + (2 * r));
+	cout << "Diameter: " << sqrt((d.x - a.x)*(c.x - a.x) + (c.y - a.y)*(d.y - a.y));
 	Point e(x - h, y + (1.5*r));
 	Point f(x - h, y + (0.5*r));
 	Point points[6] = { a, b, c, d, e, f };
@@ -35,6 +38,8 @@ void Board::buildHex(int x, int y, float h, Scalar colour) {
 	Hex hex = Hex(colour, pointsVec);
 	HexPoints.push_back(hex);
 }
+
+//Method for defining all hexes.
  //TOP LEFT (60, 440)
 //method for going through the hex array
 //this method probably shouldn't return "void". This should be looked at
@@ -55,7 +60,7 @@ void Board::buildBoard()
 	int h = 78;
 	float r = (2.0 / 3.0) * (sqrt(3.0) * h);
 	
-
+	//Define initial layout of the board
 	//plain tiles
 	hexArray[0] = Colour::PLAINS;
 	hexArray[2] = Colour::PLAINS;
@@ -177,88 +182,63 @@ void Board::buildBoard()
 	hexArray[99] = Colour::LAKE;
 	hexArray[108] = Colour::LAKE;
 
+	//Build each hex
 
 	for (int i = 0; i < 12; i++){
 		x1 += 2 * h;
-		anchors[i] = x1;
-		//hello.drawHex(x1, y, h, image, hexArray[i]);
 		buildHex(x1, y, h, hexArray[i]);
 
 	}
 	for (int i = 12; i < 25; i++){
 		x2 += 2 * h;
-		anchors[i] = x2;
 		buildHex(x2, y + ((3 * r) / 2), h, hexArray[i]);
 	}
 	for (int i = 25; i < 37; i++){
 
 		x3 += 2 * h;
-		anchors[i] = x3;
 		buildHex(x3, y + (3 * r), h, hexArray[i]);
 	}
 	for (int i = 37; i < 50; i++){
 
 		x4 += 2 * h;
-		anchors[i] = x4;
 		buildHex(x4, y + ((9 * r) / 2), h, hexArray[i]);
 	}
 	for (int i = 50; i < 62; i++){
 
 		x5 += 2 * h;
-		anchors[i] = x5;
 		buildHex(x5, y + (6 * r), h, hexArray[i]);
 	}
 	for (int i = 62; i < 75; i++){
 
 		x6 += 2 * h;
-		anchors[i] = x6;
 		buildHex(x6, y + ((15 * r) / 2), h, hexArray[i]);
 	}
 	for (int i = 75; i < 87; i++){
 
 		x7 += 2 * h;
-		anchors[i] = x7;
 		buildHex(x7, y + (9 * r), h, hexArray[i]);
 	}
 	for (int i = 87; i < 100; i++){
 
 		x8 += 2 * h;
-		anchors[i] = x8;
 		buildHex(x8, y + ((21 * r) / 2), h, hexArray[i]);
 	}
 	for (int i = 100; i < 112; i++){
 
 		x9 += 2 * h;
-		anchors[i] = x9;
 		buildHex(x9, y + (12 * r), h, hexArray[i]);
 	}
-	delete anchors;
+
 }
-//The function that actually draws the board. This needs an´image to print on, some x,y coordinates for the top of the hexes 
-//and then it needs an h input which is the distance from the center of the hex to a flat side.
-//This function draws nine lines of hexes via for loops that changes the x coodinate every time it runs.
-
+	
+//Draw each hex. This method should be called continously.
 void Board::drawBoard(Mat image){
-	//Mat gray;
-	//cvtColor(image, image, CV_BGR2GRAY);
-	//threshold(image, gray, 200, 255, THRESH_BINARY);
 
+	//For each Hex
 	for (vector<Hex>::iterator it = HexPoints.begin(); it != HexPoints.end(); ++it)
 	{
+		//Draw the Hex
 		it->drawHex(image);
 	}
 	
-
-
-	
 }
-/*//getters and setters for hex
-Hex Board::getHex(int position)
-{
-	return hex[position];
-}
-
-void Board::setHex(Hex hexNew, int position)
-{
-	hex[position] = hexNew;
-}*/
