@@ -236,5 +236,7 @@ void nextPlayerTurn()
 
 void undoLastAction()
 {
+	Scalar tmpActionColour = board.getHex(lastActionIndex).getColour();
 	board.changeHex(lastActionIndex, lastActionColour);
+	lastActionColour = tmpActionColour;
 }
