@@ -31,11 +31,14 @@ int currentPlayer = 0;
 Board board;
 Point scaledCenter;
 double scalar = 6;
+Scalar lastActionColour;
+int lastActionIndex;
 
 
 void convexHullFunction(Mat threshold_output, int minArea, int maxArea);
 void runWebcam();
 void buildPlayerArray();
+void undoLastAction();
 
 int main(int, char)
 {
@@ -117,7 +120,9 @@ void runWebcam()
 		{
 			if (board.getHex(i).Pointpoly(scaledCenter)) // && board.getHex(i).getColour() != Colour::RIVER
 			{
-				cout << "You clicked hex " << i << " and changed from " << board.getHex(i).getColour() << " and will change to " << players[currentPlayer].getFaction();
+				lastActionColour = board.getHex(i).getColour();
+				lastActionIndex = i;
+				cout << "You clicked hex " << i << " and changed from " << lastActionColour << " and will change to " << players[currentPlayer].getFaction();
 				board.changeHex(i, players[currentPlayer].getFaction());
 				board.drawBoard(image);
 				imshow("Terra Mystica Board", image);
@@ -227,4 +232,9 @@ void nextPlayerTurn()
 	{
 		currentPlayer++;
 	}
+}
+
+void undoLastAction()
+{
+	board.changeHex(lastActionIndex, lastActionColour);
 }
