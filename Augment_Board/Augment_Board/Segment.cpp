@@ -234,7 +234,6 @@ Mat Segment::dilate(Mat src, int kernRad) {
 				output.at<uchar>(y, x) = 0;
 			}
 			Temp = 0;
-
 		}
 	}
 	return output;
@@ -255,7 +254,7 @@ list<Blob> Segment::burn(Mat src)
 			if (src.at<uchar>(y, x) == 255) //If pixel is white, we have reached a new blob
 			{
 				blobCount++; 
-				blobPoints = grassFireImage(src, Point(x, y), blobCount); //call the grassFireImage(). GrassFireImage() returns a list of Points.
+				blobPoints = grassFireImage(src, Point(x, y)); //call the grassFireImage(). GrassFireImage() returns a list of Points.
 				blobPointsMinY = src.rows-1; //These four variables are set for the purpose of the if-statements within the image construction algorithm.
 				blobPointsMinX = src.cols-1;
 				blobPointsMaxX = 0;
@@ -314,7 +313,7 @@ list<Blob> Segment::burn(Mat src)
 	return blobs;
 }
 
-list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
+list<Point> Segment::grassFireImage(Mat src, Point point)
 {
 	list<Point> points;
 	Stack pointStack;
@@ -333,8 +332,14 @@ list<Point> Segment::grassFireImage(Mat src, Point point, int blobCount)
 			//The non-white pixel values are somewhat arbitrary; when the pixel value is 1 (near-black), it has been added to the stacklist,
 			//but has not yet had its neighbours checked. The pixel value is set to 0 (black) when all neighbours have been checked.  
 			//As far as the software is concerned, the exact value of non-white pixels is irrelevant. 
-		
-			if (src.at<uchar>(point.y - 1, point.x) == 255) //if adjacent pixel is white 
+
+			//Prevent out-of-bounds
+			if (point.y - 1 < 0 || point.y + 1 >= src.rows || point.x - 1 < 0 || point.x + 1 >= src.cols)
+			{
+				pointStack.pop();
+				point = pointStack.getTop()->point;
+			}
+			else if (src.at<uchar>(point.y - 1, point.x) == 255) //if adjacent pixel is white 
 			{
 				point = Point(point.x, point.y - 1);  //set adjacent pixel to be the current pixel
 				src.at<uchar>(point.y, point.x) = 1;
