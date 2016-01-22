@@ -6,7 +6,6 @@
 #include "Colour.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp" 
-#include "opencv2/highgui/highgui.hpp"
 
 
 using namespace std;
@@ -28,7 +27,7 @@ public:
 	Scalar getColour() { return colourType; };
 	void setColour(Scalar s) { colourType = s; };
 	vector<Point> getPoints() { return points; };
-	bool Hex::Pointpoly(Point p);
+	bool Pointpoly(Point p);
 
 	void drawHex(Mat image);
 };

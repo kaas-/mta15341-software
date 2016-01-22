@@ -45,7 +45,7 @@ void Board::buildHex(int x, int y, float h, Scalar colour) {
 //this method probably shouldn't return "void". This should be looked at
 void Board::buildBoard()
 {
-	int* anchors = new int[112];
+	//int* anchors = new int[112];
 	int x1 = 978; //505,150
 	int x2 = 900;
 	int x3 = 978;

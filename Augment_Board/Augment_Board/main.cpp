@@ -20,10 +20,10 @@ using namespace Segment;
 Mat image;
 int dilation_size = 3;
 Gesture gesture(image, image);
-Scalar hexArray;
+//Scalar hexArray;
 Mat element = getStructuringElement(MORPH_ELLIPSE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
-vector<vector<Point>> HexPoints = {};
-Mat src; Mat src_gray;
+//vector<vector<Point>> HexPoints = {};
+//Mat src; Mat src_gray;
 int thresh = 20;
 int max_thresh = 255;
 RNG rng(12345);
@@ -35,8 +35,8 @@ Board board;
 Point scaledCenter;
 double scalarY = 5.2;
 double scalarX = 5;
-Scalar lastActionColour;
-int lastActionIndex;
+Scalar lastActionColour; //Undo
+int lastActionIndex; //Undo
 double area;
 
 
@@ -51,7 +51,7 @@ int main(int, char)
 	
 	runWebcam();
 	//Check whether a given point is within a Hex and change the colour unless it's a river.
-	
+	/*
 	while (true) {
 		string input;
 		getline(cin, input);
@@ -66,7 +66,7 @@ int main(int, char)
 			nextPlayerTurn();
 			cout << "The current player is Player " << currentPlayer;
 		}
-	}
+	}*/
 
 	cin.get();
 	cin.get();
@@ -78,19 +78,19 @@ void runWebcam()
 	VideoCapture cap(0); // open the default camera
 	if (!cap.isOpened()) // check if we succeeded
 		cout << "No camera detected!";
-	Mat frame;
-	Mat frame2;
-	Mat finalFrame;
+	//Mat frame;
+	//Mat frame2;
+	//Mat finalFrame;
 	Mat gblur;
-	Mat thres1;
+	//Mat thres1;
 	Mat thres2;
-	Mat median;
+	//Mat median;
 	Mat eroded1;
-	Mat eroded2;
-	Mat frameArray;
-	Mat blob;
-	list<Blob> blobList;
-	vector<vector<Point>> HexPoints;
+	//Mat eroded2;
+	//Mat frameArray;
+	//Mat blob;
+	//list<Blob> blobList;
+	//vector<vector<Point>> HexPoints;
 
 	/*Mat firstFrame;
 	cap >> firstFrame;

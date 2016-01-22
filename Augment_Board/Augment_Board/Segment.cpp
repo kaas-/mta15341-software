@@ -352,10 +352,10 @@ list<Point> Segment::grassFireImage(Mat src, Point point)
 				pointStack.push(point);
 			}
 			else if (src.at<uchar>(point.y, point.x - 1) == 255)
-			{
+			{	
 				point = Point(point.x - 1, point.y);
 				src.at<uchar>(point.y, point.x) = 1;
-				pointStack.push(point);
+				pointStack.push(point); 
 			}
 			else if (src.at<uchar>(point.y, point.x + 1) == 255)
 			{
